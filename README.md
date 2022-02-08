@@ -1,3 +1,5 @@
+![創用 CC 授權條款](https://i.creativecommons.org/l/by-nc-nd/3.0/tw/88x31.png)
+
 # LearningNotes
 學習筆記，主要是 C# 與 .NET 技術。
 

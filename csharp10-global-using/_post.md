@@ -34,7 +34,7 @@
     global using global::System.Threading;
     global using global::System.Threading.Tasks;
 
-每行程式碼開頭的 `global using` 是 C# 10 新增的全域引用語法，而上面的程式片段裡面總共有七個全域引用的命名空間，這表示不僅 Console 類別，包含 File、HttpClient、Thread 等類別也都不用在其他 .cs 檔案中撰寫對應的 using 陳述句。如此一來，便可節省一些重複打字的時間。
+每行程式碼開頭的 `global using` 是 C# 10 新增的全域引用語法，而上面的程式片段裡面總共有七個全域引用的命名空間，這表示不僅 `Console` 類別，包含 `File`、`HttpClient`、`Thread` 等類別也都不用在其他 .cs 檔案中引用對應的命名空間，即可直接使用。如此一來，便可節省一些重複打字的時間。
 
 值得一提的是，上列程式碼片段中的 `global::` 指示詞是在告訴編譯器：其後面跟著的命名空間是全域（最上層）的命名空間，請不要解析成特定命名空間底下的子命名空間。這個指示詞並非必要，但如果碰到命名空間衝突的情形，便可以使用命名空間別名辨識符號 `::` 來解決。
 
@@ -60,7 +60,7 @@ global using global::System.Threading;
 global using global::System.Threading.Tasks;
 ~~~~
  
- 現在我們知道了，原來隱含引用這項功能，背後其實使用了一種叫做 global using 的語法。那麼，我們當然也可以在自己的專案裡面「明白地」撰寫這些「隱含的」using 了。（抱歉忍不住想繞口令）
+ 現在我們知道了，原來隱含引用這項功能，背後其實使用了一種叫做 `global using` 的語法。那麼，我們當然也可以在自己的專案裡面「明白地」撰寫這些「隱含的」using 了。（抱歉忍不住想繞口令）
  
 ## global using 語法
  
@@ -88,7 +88,7 @@ global using global::System.Threading.Tasks;
  
 首先，把 .csproj 檔案中的 `<ImplicitUsings>enable</ImplicitUsings>` 整行刪除，或將其屬性值改為 disable。也就是說，不要使用 Visual Studio 專案範本所提供的那些預設的全域命名空間。值得一提的是，將此功能關閉，並不影響上述範例中的 `<ItemGroup>` 區塊裡面的 Using 設定。
  
-接著在專案中加入一個 C# 檔案，通常命名為 GlobalUsings.cs。然後只要在這個檔案裡面加入你想要套用至整個專案的 global using 敘述就行了。參考下圖：
+接著在專案中加入一個 C# 檔案，通常命名為 GlobalUsings.cs。然後只要在這個檔案裡面使用 `global using` 來加入你想要套用至整個專案的命名空間就行了。參考下圖：
 
 ![](ide.png)
 

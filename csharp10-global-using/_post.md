@@ -19,7 +19,7 @@
  
 首先，程式裡面直接寫 `Console.WriteLine(...)` 而沒有 using System 命名空間，這是使用了 .NET 6 SDK 的「隱含引用」（implicit using）功能。那麼，這些隱含引用的命名空間是隱藏在哪裡呢？
 
-當專案編譯之後，我們可以在專案目錄下的 obj\Debug\目標框架\ 目錄下找到隱含引用的檔案，名稱是 [專案名稱].GlobalUsings.g.cs。如下圖：
+當專案編譯之後，我們可以在專案目錄下的「obj\Debug\目標框架\」目錄下找到隱含引用的檔案，名稱是 [專案名稱].GlobalUsings.g.cs。如下圖：
  
 ![](implicit-usings-file.png)
  

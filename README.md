@@ -30,4 +30,4 @@ Happy learning!
 
 本學習筆記由蔡煥麟（Michael Tsai）製作，以[創用CC 姓名標示-非商業性-禁止改作 3.0 台灣 授權條款](http://creativecommons.org/licenses/by-nc-nd/3.0/tw/)釋出。如欲轉發，請轉貼連結，而不要以複製、貼上內文的方式傳播。
 
-作者部落格：[Huanlin 學習筆記](https://www.huanlintalk.com)
+部落格：[Huanlin 學習筆記](https://www.huanlintalk.com)

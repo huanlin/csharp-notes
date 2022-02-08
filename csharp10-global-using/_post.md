@@ -17,7 +17,9 @@
  
 如果你還沒有在專案中使用 C# 10 新增的 using 語法，不妨把那篇文章從頭到尾瀏覽一遍，以大致了解有哪些方便的 using 語法。底下僅整理幾個重點，希望有助於快速掌握其用法。
  
-首先，程式裡面直接寫 `Console.WriteLine(...)` 而沒有 using System 命名空間，這是使用了 .NET 6 SDK 的「隱含引用」（implicit using）功能。那麼，這些隱含引用的命名空間是隱藏在哪裡呢？當專案編譯之後，我們可以在專案目錄下的 obj\Debug\目標框架\ 目錄下找到，檔案名稱是 [專案名稱].GlobalUsings.g.cs。如下圖：
+首先，程式裡面直接寫 `Console.WriteLine(...)` 而沒有 using System 命名空間，這是使用了 .NET 6 SDK 的「隱含引用」（implicit using）功能。那麼，這些隱含引用的命名空間是隱藏在哪裡呢？
+
+當專案編譯之後，我們可以在專案目錄下的 obj\Debug\目標框架\ 目錄下找到隱含引用的檔案，名稱是 [專案名稱].GlobalUsings.g.cs。如下圖：
  
 ![](implicit-usings-file.png)
  
@@ -62,7 +64,7 @@ global using global::System.Threading.Tasks;
  
 ## global using 語法
  
-global using（全域引用）也是 C# 10 新增的語法，其用途是將指定的命名空間套用於整個專案。換言之，A 專案裡面的 global using 陳述句不會影響到 B 專案或其他專案。
+`global using`（全域引用）是 C# 10 新增的語法，其用途是將指定的命名空間套用於整個專案。換言之，A 專案裡面的 `global using` 指示詞不會影響到 B 專案或其他專案。
  
 前面提到的那篇微軟文章，裡面有說可以在 .csproj 裡面使用 `<ItemGroup>` 元素來增加或移除全域的命名空間。底下是一個範例：
  

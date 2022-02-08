@@ -11,7 +11,7 @@
     // See https://aka.ms/new-console-template for more information
     Console.WriteLine("Hello, World!");
 
-如果點開註解當中的那條網址，會帶我們到一份微軟文件，而該文件的中文版標題是「新的 c # 範本會產生最上層的語句」，如下圖：
+如果點開註解當中的那條網址，會帶我們到一份[微軟文件](https://aka.ms/new-console-template)，而該文件的中文版標題是「新的 c # 範本會產生最上層的語句」，如下圖：
  
 ![](ms-article.png)
  

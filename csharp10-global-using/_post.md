@@ -94,5 +94,5 @@ global using global::System.Threading.Tasks;
 
 ## 結語
  
-我比較偏好使用一個 C# 檔案來管理整個專案的 `global using` 敘述，而不喜歡在 .csproj 檔案裡面編輯 XML 標籤。一旦命名空間發生衝突，或者有任何疑慮時，只要打開我建立的那個 GlobalUsings.cs 檔案，就一目瞭然了。
+我比較偏好使用一個 C# 檔案來管理整個專案的 `global using` 敘述，而不喜歡在 .csproj 檔案裡面編輯 XML 標籤。一旦命名空間發生衝突，或者有任何疑慮時，只要打開我建立的那個 GlobalUsings.cs 檔案，便可一目瞭然。
  

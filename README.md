@@ -9,6 +9,7 @@
 - 每一篇筆記以單獨目錄存放，目錄名稱儘量貼近文章主旨，例如 [csharp10-global-using](csharp10-global-using)。
 - 每一個文章目錄裡面都會有一個 `_post.md` 檔案，即該文章的主文。檔案名稱前面加一個底線，純粹是為了方便依檔名排序時更容易找到它。
 - 文章使用到的其他相關檔案，例如圖片、範例程式等等，也都會放在同一個子目錄。
+- 這裡的內容可能作為日後撰寫電子書的素材。如欲轉發，請轉貼連結，而不要以複製、貼上內文的方式傳播。其他事項請看下方「授權條款」。
 
 如有任何建議或補充，歡迎透過 GitHub 的 [Issues](https://github.com/huanlin/LearningNotes/issues) 功能提問或建立工單，也歡迎發 Pull Request 給我。
 
@@ -27,6 +28,6 @@ Happy learning!
 
 ![創用 CC 授權條款](https://i.creativecommons.org/l/by-nc-nd/3.0/tw/88x31.png)
 
-本學習筆記由蔡煥麟（Michael Tsai）製作，以[創用CC 姓名標示-非商業性-禁止改作 3.0 台灣 授權條款](http://creativecommons.org/licenses/by-nc-nd/3.0/tw/)釋出。
+本學習筆記由蔡煥麟（Michael Tsai）製作，以[創用CC 姓名標示-非商業性-禁止改作 3.0 台灣 授權條款](http://creativecommons.org/licenses/by-nc-nd/3.0/tw/)釋出。如欲轉發，請轉貼連結，而不要以複製、貼上內文的方式傳播。
 
 作者部落格：[Huanlin 學習筆記](https://www.huanlintalk.com)

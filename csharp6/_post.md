@@ -12,9 +12,7 @@
  - `using static` 陳述式。
  - 例外處理的改進，包括例外篩選條件（exception filter），以及 `catch` 和 `finally` 區塊裡面可以寫 `await` 陳述式。
 
- > 範例程式：<https://github.com/huanlin/csharp-book-support> 裡面的 Examples/Ch05 資料夾。
-
-## `nameof` 運算子
+ ## `nameof` 運算子
 
 C# 6 新增的 `nameof` 關鍵字可用來取得某符號的名稱，例如型別、變數、物件成員等等。請看底下這個簡單範例：
 
@@ -335,7 +333,7 @@ public static void Main()
 }
 ~~~~~~~~
 
-> 原始碼：https://dotnetfiddle.net/9TINL9
+> 範例原始碼：https://dotnetfiddle.net/9TINL9
 
 ## 以表示式為本體的成員
 
@@ -625,7 +623,7 @@ bool HandleSqlError(SqlException ex)
 }
 ~~~~~~~~
 
-> 原始碼：DemoExceptionFilter.csproj。
+> 原始碼：[DemoExceptionFilter](examples/DemoExceptionFilter)。
 
 ## `catch` 和 `finally` 區塊中的 `await`
 
@@ -681,4 +679,4 @@ static async Task LogAsync(string s)
 
 順便提及，實務上，用來保存記錄的 `LogAsync` 函式不應該再拋出例外，否則外層的 `catch` 區塊又會再次拋出新的例外，那麼第 18 行用來返回錯誤訊息的陳述式就執行不到了；也就是說，原本要記錄下來的例外會被丟棄，若將來要調閱記錄檔案來查問題，會找不到相關線索。
 
-> 原始碼：DemoExceptionAwait.csproj。
+> 範例原始碼：[DemoExceptionAwait](examples/DemoExceptionAwait)。

@@ -623,7 +623,7 @@ bool HandleSqlError(SqlException ex)
 }
 ~~~~~~~~
 
-> 原始碼：[DemoExceptionFilter](examples/DemoExceptionFilter)。
+> 範例原始碼：[DemoExceptionFilter](examples/DemoExceptionFilter)。
 
 ## `catch` 和 `finally` 區塊中的 `await`
 

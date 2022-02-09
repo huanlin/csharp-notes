@@ -3,25 +3,25 @@
 本章要介紹的是 C# 7.0 至 7.3 的新增語法和改進之處。條列如下：
 
 - [宣告輸出變數](#宣告輸出變數) 
-- [Tuple 語法](#sec-tuple) 
-- [Tuple 元素名稱推導](#sec-tuple-name-infer)
-- [分解式（deconstructor）](#sec-deconstructor)
-- [模式匹配](#sec-patternmatch)
-  - [`is` 陳述式](#sec-is-statement)
-  - [`switch` 陳述式](#sec-switch) 
-- [區域函式](#sec-localfunc)
-- [更好讀的數值表示法（literals）](#sec-literal)
-- [Ref Local與 Ref Return](#sec-ref-local-return)
-- [`throw` 運算式](#sec-throw-expression)
-- [`async Main` 方法](#sec-async-main) 
-- [`default` 運算式](#sec-default-expression)
-- [實質型別的參考語意](#sec-ref-semantic) 
-  - [`in` 參數](#sec-in-param)
-  - [唯讀結構](#sec-readonly-struct)
-  - [只能放在堆疊的結構（ref struct）](#sec-ref-struct)
-- [非後置的具名引數](#sec-nontrailing-named-arg)
-- [`private protected` 修飾詞](#sec-private-protected) 
-- [expression-bodied members 的改進] 
+- [Tuple 語法](#Tuple-語法) 
+- [Tuple 元素名稱推導](#Tuple-元素名稱推導)
+- [分解式（deconstructor）](#分解式（deconstructor）)
+- [模式匹配](#模式匹配)
+  - [`is` 陳述式]
+  - [`switch` 陳述式]
+- [區域函式](#區域函式)
+- [更好讀的數值表示法（literals）](#更好讀的數值表示法（literals）)
+- [Ref Local 與 Ref Return](#Ref-Local-與-Ref-Return)
+- [`throw` 運算式](#throw-運算式)
+- [`async Main` 方法](#async-Main-方法) 
+- [`default` 運算式](#default-運算式)
+- [實質型別的參考語意](#實質型別的參考語意) 
+  - [`in` 參數]
+  - [唯讀結構]
+  - [只能放在堆疊的結構（ref struct）]
+- [非後置的具名引數](#非後置的具名引數)
+- [`private protected` 修飾詞](#private-protected-修飾詞) 
+- [expression-bodied members 的改進] (#expression-bodied-members-的改進)
 
 ## 宣告輸出變數
 
@@ -1379,7 +1379,6 @@ public class Student
         add => handler += value;
         remove => handler -= value;
     }
-
 }
 ~~~~~~~~
 

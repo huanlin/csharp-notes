@@ -410,53 +410,6 @@ public class Demo
 >
 > 兩者皆可編譯，寫法只差一個字元，但意義卻不一樣。在寫程式或審閱別人的程式碼時，眼睛可能得睜大一點，以免漏掉 `>` 符號。
 
-### C# 7 的改進
-
-C# 6 的 expression-bodied members 語法有一些限制。底下是無法使用此語法的場合：
-
- - 建構子（包括類別的靜態建構子）
- - 解構子（finalizer）
- - 唯寫（write-only）或者可讀寫的屬性
- - 唯寫或者可讀寫的索引子
- - 事件
-
-C# 7 解除了上述限制。因此，以下範例在 C# 7 都是合法的陳述式：
-
-~~~~~~~~
-public class Student
-{
-    private string _name;
-    private readonly int[] _scores = new int[10];
-
-    // 靜態建構子與物件的建構子
-    static Student() => Console.WriteLine("靜態建構子被呼叫了。");
-    public Student(string name) => _name = name;
-
-    // 可讀寫的屬性
-    public string Name
-    {
-        get => name;
-        set => name = value;
-    }
-
-    // 可讀寫的索引子
-    public int this[int index]
-    {
-        get => values[index];
-        set => values[index] = value;
-    }
-
-    // 事件（使用自訂存取子）
-    private PropertyChangedEventHandler _handler;
-    public event PropertyChangedEventHandler PropertyChanged
-    {
-        add => handler += value;
-        remove => handler -= value;
-    }
-
-}
-~~~~~~~~
-
 ## 索引初始設定式
 
 以常用的 `Dictionary<TKey, TValue>` 集合為例，在 C# 6 之前的初始設定式的寫法如下：

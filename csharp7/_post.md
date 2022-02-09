@@ -23,6 +23,8 @@
 - [`private protected` 修飾詞](#private-protected-修飾詞) 
 - [expression-bodied members 的改進](#expression-bodied-members-的改進)
 
+---
+
 ## 宣告輸出變數
 
 以往在呼叫一個具有輸出引數的函式時，必須事先宣告輸出變數，例如：

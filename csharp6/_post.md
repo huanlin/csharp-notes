@@ -2,15 +2,15 @@
 
 本章要介紹的是 C# 6 新增的語法，包括：
 
- - `nameof` 表示式。
- - 字串插值（string interpolation）。此語法用來格式化字串，非常方便！
- - `Null` 條件運算子。
- - 唯讀自動實作屬性（read-only automatically implemented properties）。
- - 自動屬性的初始設定式（auto-property initializers）。
- - 以表示式為本體的成員（expression-bodied members）。
- - 索引初始設定式（index initializers）。
- - `using static` 陳述式。
- - 例外處理的改進，包括例外篩選條件（exception filter），以及 `catch` 和 `finally` 區塊裡面可以寫 `await` 陳述式。
+ - [`nameof` 運算子](#nameof-運算子)
+ - [字串插值](#字串插值)
+ - [唯讀自動實作屬性](#唯讀自動實作屬性)
+ - [自動屬性的初始設定式](#自動屬性的初始設定式)
+ - [以表示式為本體的成員](#以表示式為本體的成員)
+ - [索引初始設定式](#索引初始設定式)
+ - [`using static` 陳述式](#using-static-陳述式)
+ - [例外篩選條件](#例外篩選條件)
+ - [ `catch` 和 `finally` 區塊中的 `await`](#catch-和-finally-區塊中的-await)
 
  ## `nameof` 運算子
 
@@ -81,7 +81,6 @@ Console.WriteLine(msg2);
 
 結果兩次輸出的字串值都相同，如下所示：
 
-{linenos=off, lang="text"}
 ~~~~~~~~
 Michael Tsai 的月薪是 22,000
 Michael Tsai 的月薪是 22,000
@@ -135,9 +134,9 @@ int length = empList?.Length ?? 0;  // 若 empList 是 null，則 length 是 0�
 string name = empList?[0].FullName; // 若 empList 是 null，則 name 是 null。
 ~~~~~~~~
 
-## 唯讀自動實作屬性 {#ch5-readonly-auto-property}
+## 唯讀自動實作屬性
 
-第 1 章的〈[自動實作屬性](#ch1-auto-property)〉一節已經介紹過 C# 1 至 C# 3 的屬性語法，這裡延用第 1 章的範例，以便了解先前的語法有什麼需要改進的地方。請看以下程式片段：
+請看以下程式片段：
 
 ~~~~~~~~
 // C# 3：自動實作屬性（免寫私有欄位）。
@@ -179,7 +178,7 @@ public class Employee
 * 屬性 ID 只有 getter，沒有 setter 了。它是個唯讀自動屬性。
 * 由於 ID 是唯讀屬性，因此即使是類別自己也無法修改 ID 的值——建構子除外。
 
-### 微妙議題：明確實作介面的唯讀屬性
+### 明確實作介面的唯讀屬性
 
 現在，你已經知道唯讀自動屬性的語法了，且讓我們來看一個有點微妙、可能令你驚訝的問題。請看底下這段程式碼：
 
@@ -228,7 +227,6 @@ class Employee : IEmployee
 
 那麼，把發生錯誤的那行程式碼改成這樣呢：
 
-{linenos=off}
 ~~~~~~~~
 (this as IEmployee).Salary = 70000;
 ~~~~~~~~
@@ -371,7 +369,7 @@ class NewInCsharp6
 
 這裡使用了 C# 6 新增的 expression-bodied members 語法。如您所見，程式碼變得更簡短了。原本的唯讀屬性 `ElapsedSeconds` 的 `get` 區塊拿掉了，取而代之的是屬性名稱後面跟著一個以 `=>` 符號開始的 lambda 表示式——骨子裡，編譯器會把它編譯成一個 `get` 方法，就跟先前的 `BeforeCSharp6` 類別裡面的寫法類似。
 
-D> 儘管使用了 `=>` 符號，expression-bodied members 語法並非 lambda 表示式，而且跟匿名委派也沒啥關係；它只是單純告訴編譯器：請建立一個唯讀屬性，而且它的回傳值會是接在 `=>` 後面的表示式的運算結果。它就只是語法糖而已。
+> 儘管使用了 `=>` 符號，expression-bodied members 語法並非 lambda 表示式，而且跟匿名委派也沒啥關係；它只是單純告訴編譯器：請建立一個唯讀屬性，而且它的回傳值會是接在 `=>` 後面的表示式的運算結果。它就只是語法糖而已。
 
 要注意的是，這個表示式只能有一行敘述，而不能包含多行程式碼的區塊。因此，你不能這麼寫：
 
@@ -454,7 +452,7 @@ var students2 = new Dictionary<int, Student>()
 
 兩相對照，是不是更清楚它們在寫法上的差異了呢？你可以選擇自己喜歡的寫法。
 
-D> 我是偏好索引子的寫法，因為程式碼可以少寫一對大括弧，看起來更清楚。
+> 我是偏好索引子的寫法，因為程式碼可以少寫一對大括弧，看起來更清楚。
 
 ## `using static` 陳述式
 

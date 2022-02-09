@@ -317,10 +317,3 @@ string? str2 = null;  // str2 是可為 null 的字串
 > 如果你想要知道 C# 編譯器在檢查 Nullable References 語法時的規則與警告訊息，可以參考這個頁面：[CsharpNullableTypeRules.md](https://gist.github.com/huanlin/e6aebce9d13340a94ba7a6868e5c790c)。這是利用 [Cezary Piątek 提供的程式碼](https://gist.github.com/cezarypiatek/73bc42beda006bf7890d9ccc7263da03)所產生的結果，我只是把程式裡面的 "en-US" 改為 "zh-TW" 而已。
 > 
 > 如果你想要更進一步全面採用 Nullable References 語法，可以考慮使用 [EditorConfig 檔案](https://docs.microsoft.com/zh-tw/visualstudio/ide/create-portable-custom-editor-options)來把相關編譯警告提升至「錯誤」等級。
-
-
-## 重點整理
-
-- Nullable Reference Types 對既有程式會產生不小衝擊，故此功能預設為關閉。
-- C# 提供了兩種面向的控制開關：（1）`nullable annotation context`：是否啟用 Nullable References 語法；以及（2）`nullable warning context`：是否啟用 Nullable References 相關的編譯警告。
-- 我們可以在 .csproj 裡面使用 `<Nullable>enable</Nullable>` 來進行專案層級的設定，也可以在單一檔案裡面透過編譯指示詞 `#nullable enable` 來啟用此功能，或者用 `#nullable disable` 將它關閉，又或者使用 `#nullable restore` 回復至專案層級的設定。在 solution 根目錄下的 Directory.Build.props 檔案中的設定則可以套用至整個 solution 的全部專案。

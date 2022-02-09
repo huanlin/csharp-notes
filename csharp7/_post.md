@@ -50,7 +50,7 @@ Console.WriteLine(num);
 
 > 範例原始碼：<https://dotnetfiddle.net/sNeemR>
 
-## Tuple 語法 {#sec-tuple}
+## Tuple 語法
 
 如果你對 tuple 這個名詞感到陌生，不妨把它想成是一個袋子。你可以把各式各樣的物品全都裝進這個袋子，方便四處帶著走。Tuple 像個單純的容器，沒有其他特別的操作或行為——它的主要用途就是拿來裝資料、交換資料。
 
@@ -92,7 +92,6 @@ public void ShowEmpInfo()
 
 透過這個範例，可以看得出來 `Tuple` 的能讓我們把多個物件兜在一起，形成一個複合物件。此類別有多個泛型版本，方便我們建立內含多個元素的 `Tuple` 物件：
 
-{linenos=off}
 ~~~~~~~~
 Tuple(T1)
 Tuple(T1, T2)
@@ -139,7 +138,7 @@ public void ShowEmpInfo()
 
 另外要知道的是，C# 7 的 tuple 語法並非使用 `System.Tuple` 類別，而是新的 `System.ValueTuple`；前者是參考型別，後者是個結構，亦即實質型別。而且，`ValueTuple` 存在於 `System.ValueTuple.dll`，是 .NET Standard 的一部分，而且並未包含在較早版本的 .NET Framework 裡面。因此，使用 C# 7 的 tuple 語法時，你可能會需要透過 NuGet 來為專案加入 `System.ValueTuple` 套件。
 
-### Tuple 元素名稱推導 {#sec-tuple-name-infer}
+### Tuple 元素名稱推導
 
 C# 7.1 對 tuple 語法又有一些改進：能夠根據變數和屬性名稱來推導其元素名稱。先來看 C# 7.0 的寫法：
 
@@ -163,7 +162,7 @@ Console.WriteLine($"{tuple.name} {tuple.age}");
 
 第 3 行在建立 tuple 物件的時候，會直接使用變數 `name` 和 `age` 的名稱來當作 tuple 內部的元素名稱。
 
-D> 如果用 C# 7.0 來編譯上列程式碼，第 3 行的寫法等於是採用不具名的元素，於是第 4 行會導致編譯錯誤。
+> 如果用 C# 7.0 來編譯上列程式碼，第 3 行的寫法等於是採用不具名的元素，於是第 4 行會導致編譯錯誤。
 
 稍早提過，C# 7 的 tuple 語法背後所使用的型別是 `System.ValueTuple` 結構。若您有興趣知道剛才的範例程式編譯之後的「長相」，它們大概會是：
 
@@ -194,7 +193,6 @@ Console.WriteLine($"{tuple.Year}"); // 編譯失敗!
 
 第 3 行在建立 tuple 物件時，由於傳入的兩個元素都有 `Year`，編譯器就不會對它進行名稱推導。因此，第 4 行欲使用名稱 `Year` 來存取元素，便會因為沒有這個元素名稱而造成編譯錯誤。這裡要特別指出來，第 3 行的寫法雖然不會推導元素名稱，但仍可以通過編譯。像底下這個重複名稱的例子就會造成編譯錯誤了：
 
-{linenos=off}
 ~~~~~~~~
 var tuple = (x: 1, x: 2); // 編譯失敗：名稱重複!
 ~~~~~~~~
@@ -205,7 +203,6 @@ C# 7 的 tuple 語法越來越像匿名方法了。這裡用兩個 LINQ 陳述�
 
 首先是使用匿名方法的版本：
 
-{linenos=off}
 ~~~~~~~~
 from emp in employees
 select new { emp.Name, emp.Birthday };
@@ -213,7 +210,6 @@ select new { emp.Name, emp.Birthday };
 
 接著是使用 tuple 的版本：
 
-{linenos=off}
 ~~~~~~~~
 from emp in employees
 select (emp.Name, emp.Birthday);
@@ -241,11 +237,11 @@ act2(("michael", 18, true));
 
 (1) 和 (2) 兩種寫法在功能方面是等效的，可讀性則不同。試比較第 3 行和第 9 行，以及第 4 行和第 10 行的差異，便可以看得出來，存取 tuple 元素的時候仍得用 `Item1/2/3`... 的方式，就程式碼的可讀性而言並沒有比使用匿名方法好。
 
-## 分解式 {#sec-deconstructor}
+## 分解式
 
 C# 7 新增了一種叫做「分解式」（deconstructor）的方法，方法名稱固定為 `Deconstruct`。一旦類別有提供此方法，它就具備了「將物件內的元素逐一分解至多個變數」的能力。我們先用一個 `Tuple` 範例來看看「分解」實際上指的是什麼。
 
-D> Deconstructor 很容易被看成是 destructor。前者是 C# 7 新增的分解方法，後者是所謂的「解構子」（解構函式）。
+> Deconstructor 很容易被看成是 destructor。前者是 C# 7 新增的分解方法，後者是所謂的「解構子」（解構函式）。
 
 沿用上一節的範例，這次只是稍微修改先前的 `ShowEmpInfo()` 函式：
 
@@ -353,7 +349,6 @@ public static class BoxExtensions
 
 現在我們看得很清楚了：`Deconstruct` 方法與一般的 C# 方法沒有太大差異，只是方法名稱得按規定，不能隨便取。這裡要再特別指出的是，實際上會呼叫哪一個分解式，是在編譯時期就決定的，這表示 `dynamic` 變數無法使用物件的分解式。因此，底下的寫法無法通過編譯：
 
-{linenos=off}
 ~~~~~~~~
 dynamic box = new Box(10, 10);
 box.Deconstruct(out int width, out int height); // 編譯失敗!
@@ -416,13 +411,13 @@ Console.WriteLine($"內盒寬高 = {innerWidth} x {innerHeight}");
  - `Deconstruct` 方法可以多載，也可以寫成擴充方法。由於是編譯時期進行方法解析，故 `dynamic` 變數無法使用 `Deconstruct` 方法（即無法通過編譯）。
  - 分解式可巢狀分解。範例：`var (x, (y, z)) = anObject;`
 
-## 模式匹配 {#sec-patternmatch}
+## 模式匹配
 
 C# 7 增加了「模式匹配」（pattern matching）的語法，可用來判斷某個變數或陳述式的「長相」是否符合特定條件，以決定程式要走哪一條執行路徑——這樣說也許太抽象了，待會兒看到範例程式會比較清楚了。
 
 C# 7 在模式匹配這個部分，目前支援 `is` 和 `switch` 陳述式。從微軟的技術文件來看，未來應該會在這方面繼續強化。接著就來看看這個新語法有何特別之處。
 
-### 模式匹配之 `is` 陳述式 {#sec-is-statement}
+### 模式匹配之 `is` 陳述式
 
 在 C# 7 之前，如果要判斷某變數是否是某種型別，常會使用 `is` 運算子：
 
@@ -459,7 +454,7 @@ void Print(object obj)
 
   - 第 5 行：這一行就完成了兩件事，即 (1) 判斷 `obj` 的型別是否為 `string`；(2) 將物件轉型並指派給新宣告的變數 `s`。
 
-D> 如果是判斷「不為 `null`」的場合，我還是比較喜歡寫成 `(obj != null)`，而不是 `(!(obj is null))`。當然這只是個人喜好的問題。
+> 如果是判斷「不為 `null`」的場合，我還是比較喜歡寫成 `(obj != null)`，而不是 `(!(obj is null))`。當然這只是個人喜好的問題。
 
 值得注意的是，以此方式宣告的區域變數，其有效存取範圍是「在外層包住它的那個區塊」。也就是說，底下的寫法完全沒有問題：
 
@@ -474,7 +469,7 @@ void Print(object obj)
 
 > 原始碼：<https://dotnetfiddle.net/ywmqtI>
 
-### 模式匹配之 `switch` 陳述式 {#sec-switch}
+### 模式匹配之 `switch` 陳述式
 
 上一節的範例程式碼使用了兩個 `if` 陳述式，而一旦要判斷的條件很多，使用 `switch` 會比較好。而且，`switch` 陳述式還可以使用 `when` 子句來進一步提供其他條件。範例如下：
 
@@ -582,7 +577,7 @@ public static void Draw<T>(T shape)
 
 > 原始碼：http://bit.ly/csharp71pmgt
 
-## 區域函式 {#sec-localfunc}
+## 區域函式
 
 有時候，程式寫著寫著，越來越長，為了容易閱讀與維護，我們會開始整理程式碼，找出比較長的函式，把其中一部分邏輯獨立出去，成為新方法；而且這些方法不會供外界使用，所以大多會將他們定義成類別的私有方法。這樣的結果，是類別裡面會有越來越多的私有方法，而且這些方法僅由特定一兩個函式使用，並非整個類別都會用到。
 
@@ -600,7 +595,7 @@ void Foo()
 
 C# 7 新增了區域函式（local functions；或譯為「本地函式」）的語法，讓我們可以在任何函式裡面定義其他函式，正好能夠紓解上述問題。這裡說的「任何函式」，包括一般的方法、建構函式、以及屬性的 getter 與 setter。
 
-D> C# 編譯器會把區域函式編譯成類別的私有方法。
+> C# 編譯器會把區域函式編譯成類別的私有方法。
 
 現在，讓我們來看一個例子：
 
@@ -648,7 +643,7 @@ void Foo()
 
 > 原始碼：<https://dotnetfiddle.net/BFTkgJ>。
 
-## 更好讀的數值表示法 {#sec-literal}
+## 更好讀的數值表示法
 
 C# 7.0 在數值（literals）方面的語法提供了兩項改進：
 
@@ -675,7 +670,7 @@ C# 7.2 在這個部分又有了些微改進。在此之前，分隔字元 `_` �
 int num = 0b_1111000011110000;   // C# 7.1 編譯失敗；C# 7.2 OK
 ~~~~~~~~
 
-## Ref Local 與 Ref Return {#sec-ref-local-return}
+## Ref Local 與 Ref Return
 
 自 C# 1.0 以來，`ref` 關鍵字僅只用於呼叫方法時，指名參數的傳遞方式為「傳址」（或者「傳參考」；passed by reference）。也就是說，有加上 `ref` 的參數，在方法中的任何改動都會反映至呼叫端對應的變數（因為加了 `ref` 的參數只是個指標，指向呼叫端的變數）。
 
@@ -782,7 +777,7 @@ public static class Program
 
 第 7 行的作用等同於直接對 `_number` 做遞增運算。實務上不見得會需要這樣寫，不過，多了解一點也無妨。也許哪一天你在 review 別人的程式碼時看到類似的寫法，就不至於太訝異了。
 
-### 重新指派 Ref Local {#sec-reassign-ref-local}
+### 重新指派 Ref Local
 
 在 C# 7.0 推出 ref local 語法時，ref 區域變數一經指派，就不能透過重新指派來讓它參考至其他變數，例如：
 
@@ -824,14 +819,13 @@ static ref int FindX(int[] arr) => ref arr[2];
 
 其中第 5 行和第 6 行甚至可以簡化成一行：
 
-{linenos=off}
 ~~~~~~~~
 FindX(numbers) = 0;
 ~~~~~~~~
 
 希望上述說明與範例能讓讓你產生一些靈感，發現更多可能的應用場合。
 
-### Ref 條件運算式 {#sec-ref-conditional-exp}
+### Ref 條件運算式
 
 C# 7.0 的 ref local 語法，在撰寫條件運算式的時候，會碰到一些限制。請看範例：
 
@@ -855,7 +849,7 @@ static (int boys, int girls) CountBoysAndGirls(List<bool> genders)
 
 第 7 行的寫法在 C# 7.0 無法通過編譯，直到 C# 7.2 開始支援「ref 條件運算式」語法，便解決了這個問題。
 
-### Ref readonly {#sec-ref-readonly}
+### Ref readonly
 
 C# 7.0 的 ref local 和 ref return 語法並沒有辦法禁止修改變數值，直到 C# 7.2 加入了 `ref readonly` 語法，讓我們可以為 ref 區域變數和 ref 回傳值加上 `readonly` 修飾詞，以防止變數值被修改。
 
@@ -897,7 +891,7 @@ public class Foo
 * 第 7 行的 `alias` 變數是個 ref 區域變數，它指向物件的欄位，故可修改其值。
 * 第 10 行的 `alias2` 是個 ref 唯讀區域變數，所以第 11 行嘗試修改其變數值會導致編譯錯誤。
 
-## `throw` 運算式 {#sec-throw-expression}
+## `throw` 運算式
 
 當我們需要在程式中拋出例外（exception）時，是用關鍵字 `throw`，例如：
 
@@ -914,7 +908,7 @@ var result = loaded ?? throw new InvalidOperationException("檔案載入失敗!"
 
 第 2 行程式碼在 C# 6 時代無法通過編譯，到了 C# 7 則沒有問題。這個改良語法叫做「throw 運算式（expression）」。
 
-## `async Main` 方法 {#sec-async-main}
+## `async Main` 方法
 
 %% I> 如果您未曾使用 C# 非同步呼叫的語法，本節內容可能不太好懂，此時可閱讀 [第 10 章](#ch10) 以獲得更完整的說明。
 
@@ -964,25 +958,22 @@ static async Task Main()
 }
 ~~~~~~~~
 
-## `default` 運算式 {#sec-default-expression}
+## `default` 運算式
 
 在 C# 7.1 之前，如欲使用 `default` 關鍵字來取得某型別的預設值，就必須明白指定型別。像這樣：
 
-{linenos=off}
 ~~~~~~~~
 int i = default(int); // i = 0
 ~~~~~~~~
 
 到了 C# 7.1，則可以省略型別：
 
-{linenos=off}
 ~~~~~~~~
 int i = default; // C# 7.0 編譯失敗；C# 7.1 OK
 ~~~~~~~~
 
 回傳值也一樣適用：
 
-{linenos=off}
 ~~~~~~~~
 int GetDefault()
 {
@@ -1020,14 +1011,13 @@ public class MyList<T>
 
 在 C# 7.0 或更早的版本，第 7 行可以這樣寫：
 
-{linenos=off}
 ~~~~~~~~
 T item = default(T); 
 ~~~~~~~~
 
 %% https://docs.microsoft.com/zh-tw/dotnet/csharp/whats-new/csharp-7-2
 
-## 實值型別具備參考語意 {#sec-ref-semantic}
+## 實值型別具備參考語意
 
 C# 7.2 新增了一些語法，讓實質型別也具備類似參考型別的用法。包括：
 
@@ -1035,14 +1025,14 @@ C# 7.2 新增了一些語法，讓實質型別也具備類似參考型別的用�
 * 唯讀結構（`readonly struct`）
 * 只能存在堆疊的結構（`ref struct`）
 
-### in 參數 {#sec-in-param}
+### in 參數
 
 從 C# 7.2 開始，函式的參數除了可以加上 `ref` 和 `out` 修飾詞，還可以加上 `in`。當你為某個參數加上 `in` 修飾詞，即表明兩件事：
 
 * 該參數是以「傳參考」（傳址）的方式傳遞。
 * 該參數是唯讀的，亦即參數值不會在函式中改動。
 
-D> 口訣：`in` 就是 `readonly ref`。
+> 口訣：`in` 就是 `readonly ref`。
 
 底下是一個簡單的例子：
 
@@ -1064,7 +1054,7 @@ static void Print(in int num)
 
 第 7 行在宣告方法時，為參數 `num` 加上了 `in` 修飾詞，表明它是個唯讀參數。
 
-D> 這是否意味著，我們只要瞄一眼函式的參數列就知道哪些參數在此方法中不會被改動？呃……可惜並不完全是這樣。這當中還有微妙之處需要留意，稍後會進一步解釋。
+> 這是否意味著，我們只要瞄一眼函式的參數列就知道哪些參數在此方法中不會被改動？呃……可惜並不完全是這樣。這當中還有微妙之處需要留意，稍後會進一步解釋。
 
 第 9 行無法通過編譯，原因正如剛才說的，以 `in` 修飾的引數是唯讀的。把第 9 行程式碼註解掉，編譯之後的程式碼會類似底下這樣（利用 SharpLib 觀察反組譯的結果）：
 
@@ -1122,7 +1112,6 @@ static void Print(in int num, Action action)
 
 讀過前面的內容，你已經知道加上 `in` 修飾詞的參數其實就是標示了「唯讀」旗號的 `ref` 參數。因此，如果兩個多載方法的參數列宣告只有差在 `in` 和 `ref`，那麼編譯器會把它們當成相同的方法而報錯，例如：
 
-{linenos=off}
 ~~~~~~~~
 static void Print(in int num) { }
 static void Print(ref int num) { } // 編譯錯誤!
@@ -1130,7 +1119,6 @@ static void Print(ref int num) { } // 編譯錯誤!
 
 以下兩個多載方法則可以通過編譯（對你來說，應該是毫無懸念吧）：
 
-{linenos=off}
 ~~~~~~~~
 static void Print(int num) { }    // 方法 1
 static void Print(in int num) { } // 方法 2
@@ -1145,10 +1133,10 @@ Print(i);    // 呼叫方法 1
 Print(in i); // 呼叫方法 2
 ~~~~~~~~
 
-A> #### 小心版本相容性的問題
-A>
-A> 使用 `in` 參數時，還有一個地方在實際應用時可能需要留意：新舊版本的相容性。
-A> 假設你開發了一個函式庫，並以 NuGet 套件的形式發布在網路上。小王發現了你的 1.0 版的套件，並且在他的專案中使用。後來，你決定修改某個函式，為其中一個參數加上 `in` 修飾詞，然後發布了 2.0 版。小王拿到了你的新版 DLL 檔案之後，若沒有重新編譯他的程式，而是直接把你的 2.0 版 DLL 覆蓋掉原本的 1.0 版 DLL，那麼小王的程式執行時會發生 `MissingMethodException`，因為原本的方法已經找不到了。
+> **小心版本相容性的問題**
+>
+> 使用 `in` 參數時，還有一個地方在實際應用時可能需要留意：新舊版本的相容性。
+> 假設你開發了一個函式庫，並以 NuGet 套件的形式發布在網路上。小王發現了你的 1.0 版的套件，並且在他的專案中使用。後來，你決定修改某個函式，為其中一個參數加上 `in` 修飾詞，然後發布了 2.0 版。小王拿到了你的新版 DLL 檔案之後，若沒有重新編譯他的程式，而是直接把你的 2.0 版 DLL 覆蓋掉原本的 1.0 版 DLL，那麼小王的程式執行時會發生 `MissingMethodException`，因為原本的方法已經找不到了。
 
 綜上所述，我們不難發現，`in` 參數雖有好處（效率），但使用時也還是需要知道如何避免製造陷阱。如果你寫程式時總是很謹慎、在意程式碼將來好不好維護，那麼以下建議對你可能有用：
 
@@ -1156,7 +1144,7 @@ A> 假設你開發了一個函式庫，並以 NuGet 套件的形式發布在網�
 * 設計函式庫時，盡量少在在公開方法中使用 `in`，而只在私有方法中使用 `in` 參數。這樣可以把可能遭遇的意外狀況控制在自己的程式碼範圍內。
 * 不要倚賴隱含式 `in` 參數傳遞。也就是說，呼叫帶有 `in` 參數的方法時，一律明確加上 `in` 關鍵字。
 
-### 唯讀結構 {#sec-readonly-struct}
+### 唯讀結構
 
 在 C# 7.2 之前，能夠加上 `readonly` 來宣告唯讀的，就只有欄位（fields）。到了 C# 7.2，可宣告成唯讀的東西變多了——除了先前介紹過的 `ref readonly` 區域變數和 `in` 參數，我們還可以宣告唯讀的結構。在介紹唯讀結構的語法之前，讓我們先來了解一下這個語法對我們有何用處。
 
@@ -1200,15 +1188,15 @@ public readonly struct Position // 改這行。
 
 此外，唯讀屬性一經設定初始值，就不能再改，所以我們會把所有屬性的初始設定工作寫在建構函式裡（第 6～10 行）。
 
-D> 使用 `readonly struct` 來定義的唯讀結構可確保由以結構所建立的所有執行個體都是唯讀的、不可變的（immutable）。如果不需要這種「型別等級」的不可變性，我們當然還是可以不使用 `readonly struct`，而讓用戶端在建立結構時，自行決定要不要讓某個結構的執行個體具備不可變性。例如：
-D>
-D>     class Foo 
-D>     {
-D>         private readonly Position pos;
-D>         public Foo(int y) => pos.Y = y;
-D>     }
+> 使用 `readonly struct` 來定義的唯讀結構可確保由以結構所建立的所有執行個體都是唯讀的、不可變的（immutable）。如果不需要這種「型別等級」的不可變性，我們當然還是可以不使用 `readonly struct`，而讓用戶端在建立結構時，自行決定要不要讓某個結構的執行個體具備不可變性。例如：
+>
+>     class Foo 
+>     {
+>         private readonly Position pos;
+>         public Foo(int y) => pos.Y = y;
+>     }
 
-### 只能放在堆疊的結構（ref struct） {#sec-ref-struct}
+### 只能放在堆疊的結構（ref struct）
 
 我們知道，使用 `class` 來宣告的型別是參考型別（reference types），而使用 `struct` 來宣告的型別則是實質型別（value types）。參考型別所使用的記憶體空間是所謂的「堆積」（heap），實質型別則會活在變數所宣告的區塊中；如果實質型別的變數是宣告在某個函式當中的區域變數或方法的傳入參數，那麼這些變數就會放在堆疊（stack）裡。例如：
 
@@ -1271,7 +1259,7 @@ class MyClass
 
 此範例可以順利通過編譯，因為 `MyClass` 中的 `Point` 只是單純的 getter（讀取方法），而沒有在類別當中
 
-## 非後置的具名引數 {#sec-nontrailing-named-arg}
+## 非後置的具名引數
 
 非後置的具名引數（non-trailing named arguments）指的是呼叫方法時，具名引數可以寫在位置引數（positional arguments）的前面。
 
@@ -1293,11 +1281,10 @@ static void Print(string name, int age) { /*略*/ }
 
 至於最後一個方法呼叫（第 6 行），同樣也混用了具名引數和位置引數，可是具名引數 `age` 的位置不對（不符合方法宣告的引數順序），所以編譯器無法斷定剩下的非具名引數該對應到哪個參數。
 
-## `private protected` 修飾詞 {#sec-private-protected}
+## `private protected` 修飾詞
 
 如你所熟悉的，存取範圍修飾詞有 `private`、`protected`、`internal`、`public` 四種。其中 `protected` 和 `interal` 又可以混搭套用在類別的成員，表示「類別本身與與其子類別」或者「同一組件（assembly）中的所有類別」皆可存取該成員。例如：
 
-{linenos=off}
 ~~~~~~~~
 protected internal void Print() { }
 ~~~~~~~~

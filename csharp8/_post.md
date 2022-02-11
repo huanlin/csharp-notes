@@ -4,6 +4,7 @@
 
 - [索引與範圍](#索引與範圍)
 - [Null 聯合指派運算子](#Null-聯合指派運算子)
+- [簡化的 using 陳述式](#簡化的-using-陳述式)
 - [結構成員可宣告唯讀](#結構成員可宣告唯讀)
 - [預設介面實作](#預設介面實作)
 - [可為 Null 的參考型別](#可為-Null-的參考型別)
@@ -140,6 +141,32 @@ if (fontName == null)
 ~~~~~~~~
 fontName ??= "新細明體";
 ~~~~~~~~
+
+## 簡化的 using 陳述式
+
+C# 8 之前：
+
+~~~~~~~~
+if (File.Exists("readme.txt"))
+{
+    using var reader = File.OpenText("readme.txt")
+    {
+        Console.WriteLine(reader.ReadToEnd());
+    }
+}
+~~~~~~~~
+
+C# 8 開始可以減少一對大括號和一層縮排的空間：
+
+~~~~~~~~
+if (File.Exists("file.txt"))
+{
+    using var reader = File.OpenText("file.txt");
+    Console.WriteLine(reader.ReadToEnd());
+}
+~~~~~~~~
+
+以上兩種寫法的效果完全相同：當程式跑完 `if` 區塊之後，`reader` 物件就會被釋放（disposed）。
 
 ## 結構成員可宣告唯讀
 

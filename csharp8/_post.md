@@ -2,11 +2,125 @@
 
 本章要介紹的是 C# 8 的新增語法和改進之處，包括：
 
+- [索引與範圍](#索引與範圍)
 - [結構成員可宣告唯讀](#結構成員可宣告唯讀)
 - [預設介面實作](#預設介面實作)
 - [可為 Null 的參考型別](#可為-Null-的參考型別)
 
 ---
+
+## 索引與範圍
+
+C# 8 新增的索引與範圍語法是用於存取陣列中的元素，包括 `String` 或者更低階的型別如 `Span<T>` 和 `ReadOnlySpan<T>`。
+
+新增的索引語法可以讓我們指定要從陣列的「倒數第幾個元素」開始，以及到哪個地方停止。倒數第幾個元素的寫法是以 `^` 符號後面接著以 1 為開始的倒數序號。例如 `^1` 表示倒數第一個元素，`^2` 表示倒數第二個元素，依此類推。參考以下範例：
+
+~~~~~~~~
+char[] alphabets = new char[] {'A','B','C','D','E'};
+char lastChar = alphabets[^1]; // 'E'
+char lastSecond = alphabets[^2]; // 'D'
+char outOfBound = alphabets[^0]; // 可編譯，但執行時會出錯!
+~~~~~~~~
+
+範圍語法則可以取得陣列的「切片」，使用的符號是連續兩個小數點，即 `..`。符號的左右兩邊可以指定起始索引和終止索引（其中一邊可以不指定）。範例：
+
+~~~~~~~~
+char[] slice1 = alphabets[..2];   // 'A', 'B'
+char[] slice2 = alphabets[2..];   // 'C', 'D', 'E'
+char[] slice3 = alphabets[2..3];  // 'C'
+char[] slice4 = alphabets[^2..];  // 'D', 'E'
+char[] slice5 = alphabets[0..^0]; // 整個範圍
+~~~~~~~~
+
+從 `slice1` 和 `slice3` 可以看得出來，**切片的結果並未包含範圍的終止索引所在的元素**。即 `[..2]` 代表從第 0 個元素開始，取至第 1 個元素；而[2..3] 代表從第 2 個元素開始，取至第 2 個元素。
+
+注意 `slice5` 的寫法是沒問題的。`^0` 雖然不能用來取得陣列中的最後一個元素，卻可以用於指定範圍的終止索引。正如前面所說，範圍切片並不包含終止索引。
+
+> 試試看：https://dotnetfiddle.net/Hz1HxF
+
+剛才介紹的索引和範圍語法，背後憑藉的是 `System.Index` 和 `System.Range` 類別。我們也可以在程式中使用這兩個類別來表示索引和範圍，例如：
+
+~~~~~~~~
+Index lastChar = ^1;  // 設定索引：倒數第一個元素
+Range range = 0..2;   // 設定範圍：前兩個元素
+char[] firstTwo = alphabets[firstTwo]; // 'A', 'B'
+~~~~~~~~
+
+> 試試看：https://dotnetfiddle.net/y0sqK3
+
+我們也可以在自己的類別中透過 `Index` 和 `Range` 類別來設計索引子：
+
+~~~~~~~~
+class TrueLove
+{
+	string[] words = "True love never runs smooth".Split();
+    
+	public string this[Index index] => words[index];
+	public string[] this[Range range] => words[range];
+}
+
+public static void Main()
+{
+	var love = new TrueLove();		
+	Console.WriteLine(love[^1]); // "Smooth"		
+	Console.WriteLine(string.Join(" ", love[0..2])); // "True Love"
+}
+~~~~~~~~
+
+> 試試看：https://dotnetfiddle.net/g2Dgwt
+
+值得一提的是，一般的字串（`String`）以及 `Span<T>`、`ReadOnlySpan<T>` 類別都可使用索引和範圍，但 `List<A>` 只能使用索引，而不可指定範圍。
+
+此外，經由前面的範例，我們知道單維度陣列可使用索引和範圍，但如果是多維度陣列，則又還有一些細節：規則的多維度陣列（矩陣）不支援索引和範圍語法，但是不規則多維陣列（陣列中還有陣列）則可。
+
+底下是多維陣列（矩陣）的範例：
+
+~~~~~~~~
+int[,] matrix = new int[,]  
+{ 
+    { 1, 2, 3},
+    { 4, 5, 6},
+    { 7, 8, 9}
+};
+
+Console.WriteLine(matrix[0, 2]);  // "3"
+Console.WriteLine(matrix[0, ^1]); // 編譯失敗！
+~~~~~~~~
+
+> 試試看：https://dotnetfiddle.net/zXefe6
+
+底下則是不規則多維陣列的範例：
+
+~~~~~~~~
+var jagged = new int[3][]
+{
+    new int[10] { 0,  1, 2, 3, 4, 5, 6, 7, 8, 9},
+    new int[10] { 10,11,12,13,14,15,16,17,18,19},
+    new int[10] { 20,21,22,23,24,25,26,27,28,29}
+};
+
+var selectedRows = jagged[0..2];
+
+foreach (var row in selectedRows)
+{
+    var selectedColumns = row[^2..];
+    foreach (var cell in selectedColumns)
+    {
+        Console.Write($"{cell}, ");
+    }
+    Console.WriteLine();
+}	
+~~~~~~~~
+
+執行結果：
+
+{linenos=off}
+~~~~~~~~
+8, 9, 
+18, 19, 
+~~~~~~~~
+
+> 試試看：https://dotnetfiddle.net/i6n6Z1
 
 ## 結構成員可宣告唯讀
 

@@ -477,3 +477,6 @@ string? str2 = null;  // str2 是可為 null 的字串
 > 如果你想要知道 C# 編譯器在檢查 Nullable References 語法時的規則與警告訊息，可以參考這個頁面：[CsharpNullableTypeRules.md](https://gist.github.com/huanlin/e6aebce9d13340a94ba7a6868e5c790c)。這是利用 [Cezary Piątek 提供的程式碼](https://gist.github.com/cezarypiatek/73bc42beda006bf7890d9ccc7263da03)所產生的結果，我只是把程式裡面的 "en-US" 改為 "zh-TW" 而已。
 > 
 > 如果你想要更進一步全面採用 Nullable References 語法，可以考慮使用 [EditorConfig 檔案](https://docs.microsoft.com/zh-tw/visualstudio/ide/create-portable-custom-editor-options)來把相關編譯警告提升至「錯誤」等級。
+～END～
+
+👉[返回首頁](https://github.com/huanlin/LearningNotes#readme)

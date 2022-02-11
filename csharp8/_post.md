@@ -53,17 +53,17 @@ char[] firstTwo = alphabets[firstTwo]; // 'A', 'B'
 ~~~~~~~~
 class TrueLove
 {
-	string[] words = "True love never runs smooth".Split();
+    string[] words = "True love never runs smooth".Split();
     
-	public string this[Index index] => words[index];
-	public string[] this[Range range] => words[range];
+    public string this[Index index] => words[index];
+    public string[] this[Range range] => words[range];
 }
 
 public static void Main()
 {
-	var love = new TrueLove();		
-	Console.WriteLine(love[^1]); // "Smooth"		
-	Console.WriteLine(string.Join(" ", love[0..2])); // "True Love"
+    var love = new TrueLove();		
+    Console.WriteLine(love[^1]); // "Smooth"		
+    Console.WriteLine(string.Join(" ", love[0..2])); // "True Love"
 }
 ~~~~~~~~
 
@@ -114,7 +114,6 @@ foreach (var row in selectedRows)
 
 執行結果：
 
-{linenos=off}
 ~~~~~~~~
 8, 9, 
 18, 19, 

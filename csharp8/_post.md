@@ -5,10 +5,13 @@
 - [索引與範圍](#索引與範圍)
 - [Null 聯合指派運算子](#Null-聯合指派運算子)
 - [簡化的 using 陳述式](#簡化的-using-陳述式)
+- [靜態區域函式](#靜態區域函式)
+- [Tuple 與屬性樣式](#Tuple-與屬性樣式)
+- [Switch 表達式](#Switch-表達式)
 - [結構成員可宣告唯讀](#結構成員可宣告唯讀)
 - [預設介面實作](#預設介面實作)
 - [可為 Null 的參考型別](#可為-Null-的參考型別)
-
+- [非同步串流](#非同步串流)
 ---
 
 ## 索引與範圍
@@ -167,6 +170,150 @@ if (File.Exists("file.txt"))
 ~~~~~~~~
 
 以上兩種寫法的效果完全相同：當程式跑完 `if` 區塊之後，`reader` 物件就會被釋放（disposed）。
+
+## 靜態區域函式
+
+一般的區域函式能夠存取（捕捉）其外層區塊的變數和物件成員，如以下範例：
+
+~~~~~~~~
+public string GetName()
+{
+    string firstName = "Adam";
+    string lastName = "Kay";
+
+    return LocalGetName();
+
+    string LocalGetName()
+    {
+        return $"{firstName} {lastName}";
+    }
+}
+~~~~~~~~
+
+C# 8 開始可以讓我們在區域函式前面加上 `static` 修飾詞，以確保該「靜態區域函式」無法存取外層區塊的變數和物件成員。如果把上面範例中的 `LocalGetName` 函式前面加上 `static` 宣告，變成：
+
+~~~~~~~~
+    static string LocalGetName()
+    {
+        return $"{firstName} {lastName}"; // 編譯失敗!
+    }
+~~~~~~~~
+
+編譯會失敗，因為無法抓到外層變數 `firstName` 和 `lastName`。這種靜態區域函式的用處在於，有時候區域函式本身也會宣告一些暫時性的區域變數，而這些變數有可能跟外層函式的區域變數名稱相同，或者跟類別的欄位名稱相同，容易造成混淆、不易解讀，甚至產生 bugs。就像底下的範例：
+
+~~~~~~~~
+public string GetName()
+{
+    string firstName = "Adam";
+    string lastName = "Kay";
+
+    return LocalGetName();
+
+    string LocalGetName()
+    {
+        string firstName = "John";
+
+        return $"{firstName} {lastName}";
+    }
+}
+~~~~~~~~
+
+此範例程式可以通過編譯，但程式的意圖與執行結果則引人猜疑，原因就在於區域函式裡面也宣告了自己的 `firstName` 變數，但 `lastName` 卻是外層函式的變數。像這種可能產生混淆的情形，便可以宣告成靜態區域函式，明確限定其變數範圍。
+
+## Switch 表達式
+
+底下是 `switch` 陳述式（statement）的範例：
+
+~~~~~~~~
+string GetName(int id)
+{
+    string name = "未選擇";
+
+    switch (id)
+    {
+        case 1: name = "台北市";
+                break;
+        case 2: name = "高雄市";
+                break;
+        default:break;
+    }
+    return name;
+}
+~~~~~~~~
+
+C# 8 開始提供了 `switch` 表達式（expression，或譯作「運算式」），可將剛才的範例改寫成：
+
+~~~~~~~~
+string GetName(int id)
+{
+    string name = id switch
+    {
+        1 => "台北市",
+        2 => "高雄市",
+        _ => "未選擇"  // 預設值
+    };
+    return name;
+}
+~~~~~~~~
+
+注意 `switch` 是寫在變數的後面，而且不需要寫 `case` 和 `break`。總之，程式碼更簡潔。
+
+另外要注意的是，如果沒有寫 `_` 來指定預設值，而其他條件又沒有匹配，則執行時會拋出例外。
+
+匹配的對象不僅可以是單一變數值，還可以是 `tuple`。參考以下範例：
+
+~~~~~~~~
+string GetName(int id, string postCode)
+{
+    string name = (id, postCode) switch
+    {
+        (1, "100") => "台北市中正區",
+        (2, "802") => "高雄市苓雅區",
+        _ => "未選擇"
+    };
+
+    return name;
+}
+~~~~~~~~
+
+## Tuple 樣式、位置樣式、屬性
+
+C# 8 支援三種新樣式，主要是用於 `switch` 陳述式或表達式（二者差異請看上一節的說明）。這三種新樣式為：**Tuple 樣式**、**位置樣式**（positional pattern）、**屬性樣式**（property pattern）。
+
+上一節的範例程式已經展示了 Tuple 樣式的用法，方便閱讀起見，這裡再貼一次關鍵程式碼：
+
+~~~~~~~~
+string name = (id, postCode) switch
+{
+    (1, "100") => "台北市中正區",
+    (2, "802") => "高雄市苓雅區",
+    ...
+};
+~~~~~~~~
+
+屬性樣式可用來比對某物件的屬性，例如：
+
+~~~~~~~~
+string GetName(Address addr)
+{
+    return addr switch
+    {
+        {  PostCode: "100" } => "台北市中正區",
+        {  PostCode: "802" } => "高雄市苓雅區",
+        _ => "未選擇"
+    };
+}
+~~~~~~~~
+
+`Address` 類別包含地址資訊，其 `PostCode` 屬性則是郵遞區號。以上範例的可以比對地址物件的 
+
+而位置樣式則
+
+位置樣式
+
+中Tuple 樣式已經在上一節的範例中
+
+
 
 ## 結構成員可宣告唯讀
 

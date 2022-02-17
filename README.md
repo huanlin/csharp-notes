@@ -13,11 +13,20 @@
 
 ## 檔案目錄結構
 
-- 第一層子目錄是文章分類，例如 [csharp10](csharp10)。在分類目錄之下的每一個子目錄則包含一篇文章，且目錄名稱儘量貼近文章主旨，方便識別。例如： [global-using](csharp10/global-using)。
-- 每一個文章目錄裡面都會有一個 `_post.md` 檔案，即該文章的主文。檔案名稱前面加一個底線，純粹是為了方便依檔名排序時更容易找到它。
+- 第一層子目錄是文章分類，例如 [csharp10](csharp10)。在分類目錄之下的每一個子目錄，如果有 `_post.md` 檔案，那便是全部內容了；如果子目錄底下還有再區分子目錄，即表示還有進一步細分文章主題，而子目錄名稱會儘量貼近文章主旨，方便識別，例如 [global-using](csharp10/global-using)。
+- `_post.md` 檔案名稱前面加一個底線，純粹是為了方便依檔名排序時更容易找到它。
 - 文章使用到的其他相關檔案，例如圖片、範例程式等等，也都會放在同一個子目錄。
 
 如有任何建議或補充，歡迎透過 GitHub 的 [Issues](https://github.com/huanlin/LearningNotes/issues) 功能提問或建立工單，也歡迎發 Pull Request 給我。
+
+## 參考資料
+
+C# 筆記的主要參考資料有：
+
+1. [微軟文件](https://docs.microsoft.com/zh-tw/dotnet/csharp/)
+2. [Programming C# 8.0: Build Cloud, Web, and Desktop Applications](https://www.amazon.com/Programming-8-0-Windows-Desktop-Applications/dp/1492056812) by Ian Griffiths.
+3. [C# 10 in a Nutshell: The Definitive Reference](https://www.amazon.com/C-10-Nutshell-Definitive-Reference/dp/1098121953) by Joseph Albahari.
+4. 網路文章（難以羅列）。
 
 ## 授權條款
 

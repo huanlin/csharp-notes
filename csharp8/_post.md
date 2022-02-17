@@ -326,7 +326,7 @@ return addr switch
 說明：
 
 - 第一個比對條件會先測試 `addr` 的型別是否為 `TWAddress`，如果是的話，再比對 `PostCode` 屬性值是否符合。
-- 第二個比對條件在測試型別的時候換成了 `USAddress`。
+- 第二個比對條件在測試型別的時候換成了 `USAddress`，同時也有比對 `PostCode` 屬性。
 - 第三個比對條件只要求型別是 `USAddress`。
 - 第四個是預設值。
 
@@ -352,7 +352,7 @@ if (obj is string { Length: 4 }) ...
 先來看一個 `switch` 陳述式的範例：
 
 ~~~~~~~~
-// 注意：此範例無法通過編譯!
+// 此範例無法通過編譯!
 switch (point) 
 {
     case (0, 0): return "原點";
@@ -364,7 +364,7 @@ switch (point)
 
 暫且假設 `point` 是一個包含 X、Y 座標的 `System.Drawing.Point` 結構。第一個 `case` 要求座標 X 和 Y 都必須是 0，第二個 `case` 則只要求 X 座標為 0，Y 座標可以是任意值，第三個 `case` 則只要求 Y 座標為 0，X 座標可為任意值。這三個 `case` 條件都使用了**位置樣式**來比對座標。
 
-然而，上述範例無法通過編譯；編譯器會指出錯誤：Point 結構並未提供 `Deconstruct` 方法。這是因為，位置樣式需要搭配具有分解式（deconstructor）的物件來使用，亦即物件必須有 `Deconstruct` 方法。
+然而，上述範例無法通過編譯；編譯器會指出錯誤：`Point` 結構並未提供 `Deconstruct` 方法。這是因為，位置樣式需要搭配具有分解式（deconstructor）的物件來使用，亦即物件必須有 `Deconstruct` 方法。
 
 > 註：tuple 沒有 `Deconstruct` 方法，但可以使用位置樣式來比對，是因為編譯器能夠認得 tuple 物件並拆解它們。說得更具體些，編譯器如果發現欲比對的物件沒有 `Deconstruct` 方法，接著就會看看該物件是否是個 tuple（有沒有實作 `ITuple` 介面），如果是的話，便會比對元素數量以及元素值。
 
@@ -389,7 +389,7 @@ public readonly struct Point
 }
 ~~~~~~~~
 
-稍早介紹過 `switch` 表達式，所以這裡順便再複習一次，把剛才的 `switch` 陳述式範例改成 `switch` 表達式：
+稍早介紹過 `switch` 表達式，這裡順便再複習一次，把剛才的 `switch` 陳述式範例改成 `switch` 表達式：
 
 ~~~~~~~~
 return point switch 

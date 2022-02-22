@@ -850,7 +850,7 @@ async IAsyncIEnumerable<int> GetNumbers()
 }
 ~~~~~~~~
 
-有了 `IAsyncEnumerable<T>`，再搭配 C# 8 新增的 `async foreach` 語法，就可以讓我們更自然地寫出非同步串流的程式碼。底下是把稍早的同步呼叫的範例程式改寫成 async 版本：
+有了 `IAsyncEnumerable<T>`，再搭配 C# 8 新增的 `await foreach` 語法，就可以讓我們更自然地寫出非同步串流的程式碼。底下是把稍早的同步呼叫的範例程式改寫成 async 版本：
 
 ~~~~~~~~
 IAsyncEnumerable<int> numbers = GetNumbers();

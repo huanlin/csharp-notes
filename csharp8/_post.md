@@ -717,6 +717,8 @@ string? str2 = null;  // str2 是可為 null 的字串
 
 C# 不是已經有 `async` 和 `await` 語法可實現非同步呼叫嗎？為什麼還需要非同步串流（async streams）呢？
 
+> [在部落格閱讀這篇文章](https://www.huanlintalk.com/2022/02/csharp-async-streams.html)（部落格ˇ上面的程式碼有顯示行號）
+
 在需要處理大量資料的場合，我們可以在程式中透過「非同步」（asynchronous）的方式來呼叫其他 API（例如 Web API、資料查詢 API 等等）以獲取資料，好讓用戶端在我們的程式等待其他 API 回傳資料的過程中還能繼續做其他事情，不至於完全卡住使用者介面。這是非同步呼叫的好處之一。
 
 剛才說的那些 API 所回傳的資料類型通常是 `IEnumerable<T>`，然而，`IEnumerable<T>` 的運作方式是同步的（synchronous）。意思是，在拉取資料的場合，用戶端必須等到資料提供端回傳所有需要之資料，才能對那些資料進行後續處理（例如顯示在網頁上）。也就是說，雖然非同步呼叫可以讓使用者繼續動動滑鼠、敲敲鍵盤，但沒辦法讓她想看到的資料盡快出現。
@@ -900,6 +902,8 @@ while (await e.MoveNextAsync())
 - 用戶端程式在使用 `await foreach` 來逐一取得非同步串流的內容（元素）時，背後真正觸發其「抓取資料」動作的是 `IAsyncEnumerator<T>` 的 `MoveNextAsync` 方法。用白話來說就是：當用戶端需要下一筆資料，才立刻去抓那一筆資料。
 
 💬 P.S. 本文提及「拉取資料」時，指的是 pull-based API，例如 `IEnumerable<T>`。沒有明確指出的是另一種 push-based API，例如 [`IObservable<T>`](https://docs.microsoft.com/zh-tw/dotnet/api/system.iobservable-1?view=net-6.0)。此外，本文也沒有介紹 `yield break` 和 [`IAsyncDisposable`](https://docs.microsoft.com/zh-tw/dotnet/api/system.iasyncdisposable?view=net-6.0)。
+
+---
 
 ～END～
 

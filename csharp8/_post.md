@@ -781,11 +781,11 @@ IEnumerable<int> GetNumbers()
 IEnumerable<int> GetNumbers()
 {
     yield return 1;
-    Console.WriteLine($"回傳 1 之後");
+    Console.WriteLine("回傳 1 之後");
     yield return 2;
-    Console.WriteLine($"回傳 2 之後");
+    Console.WriteLine("回傳 2 之後");
     yield return 3;
-    Console.WriteLine($"回傳 3 之後");
+    Console.WriteLine("回傳 3 之後");
 }
 ~~~~~~~~
 

@@ -717,7 +717,7 @@ string? str2 = null;  // str2 是可為 null 的字串
 
 C# 不是已經有 `async` 和 `await` 語法可實現非同步呼叫嗎？為什麼還需要非同步串流（async streams）呢？
 
-> [在部落格閱讀這篇文章](https://www.huanlintalk.com/2022/02/csharp-async-streams.html)（部落格ˇ上面的程式碼有顯示行號）
+> 👉 [在部落格閱讀這篇文章](https://www.huanlintalk.com/2022/02/csharp-async-streams.html)（部落格ˇ上面的程式碼有顯示行號）
 
 在需要處理大量資料的場合，我們可以在程式中透過「非同步」（asynchronous）的方式來呼叫其他 API（例如 Web API、資料查詢 API 等等）以獲取資料，好讓用戶端在我們的程式等待其他 API 回傳資料的過程中還能繼續做其他事情，不至於完全卡住使用者介面。這是非同步呼叫的好處之一。
 

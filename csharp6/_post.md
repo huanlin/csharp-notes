@@ -18,7 +18,7 @@
 
 C# 6 新增的 `nameof` 關鍵字可用來取得某符號的名稱，例如型別、變數、物件成員等等。請看底下這個簡單範例：
 
-~~~~~~~~
+~~~~~~~~csharp
 string firstName = "Joey";
 string varName = nameof(firstName);  // 編譯結果：varName = "firstName"
 ~~~~~~~~
@@ -29,7 +29,7 @@ string varName = nameof(firstName);  // 編譯結果：varName = "firstName"
 
 比如說，為了防錯，我們經常在函式中預先檢查參數值是否合法，並將不合法的參數透過拋出例外（exception）的方式通知呼叫端（或者寫入 log 檔案以供將來診斷問題）。像這樣：
 
-~~~~~~~~
+~~~~~~~~csharp
 void LoadProduct(string productId)
 {
     if (productId == null)
@@ -44,7 +44,7 @@ void LoadProduct(string productId)
 
 現在，C# 6 提供了 `nameof` 表示式，正好可以解決這個問題。於是剛才的範例可以改寫成這樣：
 
-~~~~~~~~
+~~~~~~~~csharp
 void LoadProduct(string productId)
 {
     if (productId == null)
@@ -70,7 +70,7 @@ void LoadProduct(string productId)
 
 參考底下的範例：
 
-~~~~~~~~
+~~~~~~~~csharp
 string firstName = "Michael";
 string lastName = "Tsai";
 int salary = 22000;
@@ -92,7 +92,7 @@ Michael Tsai 的月薪是 22,000
 
 字串插值跟 `nameof` 表示式一樣都是語法糖，是編譯時期的魔法。明白地說，編譯器會把字串插值的語法編譯成 `String.Format()` 方法呼叫。底下是更多字串插值的範例，右邊註解則是編譯後的結果。
 
-~~~~~~~~
+~~~~~~~~csharp
 $"姓名 = {myName}"    // String.Format("姓名 = {0}", myName)
 $"小時 = {DateTime.Now:hh}"  // String.Format("小時 = {0:hh}", DateTime.Now)
 $"{{測試大括弧}}"      // String.Format("{{測試大括弧}}")
@@ -105,7 +105,7 @@ $"{{秒 = {DateTime.Now :ss}}}" // String.Format("{{秒 = {0:ss}}}", DateTime.No
 
 保險起見，在需要存取某物件的屬性之前，我們通常會先檢查該物件是否為 `null`，以免程式執行時拋出例外（`NullReferenceException`）。一般常見的寫法如下：
 
-~~~~~~~~
+~~~~~~~~csharp
 static void NullPropagationDemo(string s)
 {
     if (s != null && s.Length == 4) // 只有當 s 不為空時才存取它的 Length 屬性。
@@ -117,7 +117,7 @@ static void NullPropagationDemo(string s)
 
 C# 6 新增了 `null` 條件運算子語法，讓你用更簡短的語法達到同樣效果：先判斷物件是否為 `null`，不是 `null` 才會存取其成員。它的寫法是在變數後面跟著一個問號，然後是存取成員名稱的表示式。參考以下範例：
 
-~~~~~~~~
+~~~~~~~~csharp
 static void NullPropagationDemo(string s)
 {
     if (s?.Length == 4) // 只有當 s 不為空時才存取它的 Length 屬性。
@@ -129,7 +129,7 @@ static void NullPropagationDemo(string s)
 
 更多範例：
 
-~~~~~~~~
+~~~~~~~~csharp
 int? length = empList?.Length; // 若 empList 是 null，則 length 也是 null。
 Employee emp = empList?[0];    // 若 empList 是 null，則 obj 也是 null。
 int length = empList?.Length ?? 0;  // 若 empList 是 null，則 length 是 0。
@@ -140,7 +140,7 @@ string name = empList?[0].FullName; // 若 empList 是 null，則 name 是 null�
 
 請看以下程式片段：
 
-~~~~~~~~
+~~~~~~~~csharp
 // C# 3：自動實作屬性（免寫私有欄位）。
 public class Employee
 {
@@ -157,7 +157,7 @@ public class Employee
 
 C# 6 在這方面做了改進，增加了「**唯讀自動實作屬性**」（read-only automatically implemented properties）語法，或簡稱「**唯讀自動屬性**」。請看以下範例：
 
-~~~~~~~~
+~~~~~~~~csharp
 // C# 6：唯讀自動屬性。
 public class Employee
 {
@@ -184,7 +184,7 @@ public class Employee
 
 現在，你已經知道唯讀自動屬性的語法了，且讓我們來看一個有點微妙、可能令你驚訝的問題。請看底下這段程式碼：
 
-~~~~~~~~
+~~~~~~~~csharp
 interface IEmployee
 {
     int Salary { get; }   // 唯讀屬性。
@@ -208,7 +208,7 @@ class Employee : IEmployee
 
 那麼，如果我們想要改成**明確實作**（explicitly implement）介面的寫法，直覺上可能會這樣寫：
 
-~~~~~~~~
+~~~~~~~~csharp
 class Employee : IEmployee
 {
     int IEmployee.Salary { get; } // 明確實作 IEmployee.Salary 屬性。
@@ -229,7 +229,7 @@ class Employee : IEmployee
 
 那麼，把發生錯誤的那行程式碼改成這樣呢：
 
-~~~~~~~~
+~~~~~~~~csharp
 (this as IEmployee).Salary = 70000;
 ~~~~~~~~
 
@@ -243,7 +243,7 @@ class Employee : IEmployee
 
 若一定要使用明確實作介面的寫法，我們可以繞個彎，用唯讀的私有欄位來保存屬性值，便可解決。如下所示：
 
-~~~~~~~~
+~~~~~~~~csharp
 class Employee : IEmployee
 {
     private readonly int _salary;   // 唯讀的私有欄位。
@@ -264,7 +264,7 @@ class Employee : IEmployee
 
 在 C# 6 之前，自動屬性的初始值只能透過建構子來設定，而無法在宣告屬性的時候就設定初始值。C# 6 對此做了改進，提供了「自動屬性初始設定式」（auto-property initializers）語法，讓我們能夠在宣告屬性的時候就一併設定初始值。如以下範例所示：
 
-~~~~~~~~
+~~~~~~~~csharp
 public class Employee
 {
     public string ID { get; private set; } = "A001";
@@ -275,7 +275,7 @@ public class Employee
 
 此語法的主要特色，是在定義自動屬性的時候用 `=` 運算子來加上賦值敘述，以設定該屬性的初始值。需注意的是，此賦值語法只能用於自動實作屬性；若用在非自動屬性，編譯時會報錯。所以底下的程式碼無法通過編譯：
 
-~~~~~~~~
+~~~~~~~~csharp
 public class Employee
 {
     private string _name;
@@ -290,7 +290,7 @@ public class Employee
 
 另外，自動屬性的初始設定式無法透過 `this` 來存取該類別的其他成員。也就是說，如果想要在自動屬性的初始設定式中呼叫該類別的方法，則該方法必須是靜態方法。請看以下範例與註解中的說明：
 
-~~~~~~~~
+~~~~~~~~csharp
 public class Employee
 {
     public int Age { get; } = this.GetAge(); // 編譯失敗！不可呼叫 instance 成員。
@@ -303,7 +303,7 @@ public class Employee
 
 在進入下一個議題之前，我想再補充一下**唯讀自動屬性**所提供的「不可變性」（immutability）在寫程式的時候有什麼好處。請看底下的範例：
 
-~~~~~~~~
+~~~~~~~~csharp
 public class Employee
 {
     public List<string> Addresses { get; } // 唯讀自動屬性
@@ -323,7 +323,7 @@ public class Employee
 
 屬性 `Addresses` 是個唯讀自動屬性，一旦初始化完成，就不能在其他地方修改。於是乎，外界可以取得 `Addresses` 串列，並且呼叫它的 `Add` 或 `Remove` 方法來增加或刪除元素，但是無法將這個 `Addresses` 屬性設定成 `null` 或指向其他串列。參考以下範例：
 
-~~~~~~~~
+~~~~~~~~csharp
 public static void Main()
 {
     var emp = new Employee();
@@ -341,7 +341,7 @@ C# 6 新增了「以表示式為本體的成員」語法，英文是 **expressio
 
 C# 6 之前：
 
-~~~~~~~~
+~~~~~~~~csharp
 class BeforeCSharp6
 {
     private DateTime startTime = DateTime.Now;
@@ -360,7 +360,7 @@ class BeforeCSharp6
 
 C# 6 之後，可以這麼寫：
 
-~~~~~~~~
+~~~~~~~~csharp
 class NewInCsharp6
 {
     private DateTime startTime = DateTime.Now;
@@ -375,7 +375,7 @@ class NewInCsharp6
 
 要注意的是，這個表示式只能有一行敘述，而不能包含多行程式碼的區塊。因此，你不能這麼寫：
 
-~~~~~~~~
+~~~~~~~~csharp
 public int ElapsedSeconds =>
 {
     return (DateTime.Now - startTime).Seconds; // 編譯失敗！
@@ -384,7 +384,7 @@ public int ElapsedSeconds =>
 
 此外，「以表示式為本體的成員」可以是屬性、索引子（indexer）或方法，而且有沒有回傳值都可以。底下是更多範例：
 
-~~~~~~~~
+~~~~~~~~csharp
 public class Demo
 {
     public string FullName =>
@@ -414,7 +414,7 @@ public class Demo
 
 以常用的 `Dictionary<TKey, TValue>` 集合為例，在 C# 6 之前的初始設定式的寫法如下：
 
-~~~~~~~~
+~~~~~~~~csharp
 var weeks = new Dictionary<int, string>()
 {
     {1, "星期一"},
@@ -425,7 +425,7 @@ var weeks = new Dictionary<int, string>()
 
 到了 C# 6，只要集合類型本身有支援索引子，便可使用索引子的語法來初始化集合元素。如下所示：
 
-~~~~~~~~
+~~~~~~~~csharp
 var weeks = new Dictionary<int, string>()
 {
     [1] = "星期一",
@@ -436,7 +436,7 @@ var weeks = new Dictionary<int, string>()
 
 底下再借用第 1 章的範例，作為補充。其初始設定式使用了自訂類別 `Student`：
 
-~~~~~~~~
+~~~~~~~~csharp
 // C# 6 之前
 var students1 = new Dictionary<int, Student>()
 {
@@ -460,7 +460,7 @@ var students2 = new Dictionary<int, Student>()
 
 在 C# 6 之前，只要有引用（`using`）某類別所屬的命名空間，便可使用「類別名稱.成員名稱」的語法來存取該類別的靜態成員。例如：
 
-~~~~~~~~
+~~~~~~~~csharp
 using System;      // 引用 System 命名空間（的所有型別）
 using System.IO;   // 引用 System.IO 命名空間（的所有型別）
 
@@ -482,7 +482,7 @@ class BeforeCSharp6
 
 於是，剛才的範例可以改寫成這樣：
 
-~~~~~~~~
+~~~~~~~~csharp
 using static System.Console;  // 匯入 System.Console 類別的所有靜態成員
 using static System.IO.File;  // 匯入 System.IO.File 類別的所有靜態成員
 
@@ -504,7 +504,7 @@ class NewInCSharp6
 
 然而在某些場合，省略類別名稱的寫法卻是同時兼具簡潔美觀、易讀易懂的優點。例如 `Math` 類別。試比照底下兩行程式碼的寫法：
 
-~~~~~~~~
+~~~~~~~~csharp
 var value1 = Math.Sqrt(Math.Sin(90) + Math.Cos(45)); // using System
 var value2 = Sqrt(Sin(90) + Cos(45));     // using static System.Math
 ~~~~~~~~
@@ -519,7 +519,7 @@ var value2 = Sqrt(Sin(90) + Cos(45));     // using static System.Math
 
 在處理例外狀況的時候，我們可能會想要針對捕捉到的例外再進一步依照其內部詳細錯誤資訊來做個別處理。比如說，當 `catch` 區塊捕捉到了 `SqlException`，我們也許會想知道，這次發生的資料庫操作錯誤，究竟是因為主鍵重複的緣故，還是發生死結（deadlock）或其他原因；如果是主鍵重複或死結，就撰寫額外的邏輯來處理。在 C# 6 之前，我們可能會這樣寫：
 
-~~~~~~~~
+~~~~~~~~csharp
 try
 {
     // 執行資料異動。
@@ -540,7 +540,7 @@ catch (SqlException ex)
 
 從 C# 6 開始，例外處理的 `catch` 區塊可以一併指定篩選條件，語法是在 `catch` 後面加上以 `when` 開頭的條件式，而只有當 `when` 子句的條件式成立才會進入那個 `catch` 區塊。所以剛才的例子可以改成：
 
-~~~~~~~~
+~~~~~~~~csharp
 try
 {
     // 執行資料異動。
@@ -559,7 +559,7 @@ catch (SqlException ex) when (ex.Number == 1205)
 
 例外篩選條件裡面也可以包含方法呼叫，例如：
 
-~~~~~~~~
+~~~~~~~~csharp
 try
 {
     // 執行資料異動。
@@ -582,7 +582,7 @@ bool HandleSqlError(SqlException ex)
 
 在處理例外狀況時，一種很常見的寫法是在 `catch` 或 `finally` 區塊中把錯誤訊息保存至某個記錄檔。由於寫入記錄檔是個 I/O 操作，所以使用非同步呼叫也是很合理的。於是，我們可能會想要這樣寫：
 
-~~~~~~~~
+~~~~~~~~csharp
 try
 {
     ...
@@ -597,7 +597,7 @@ catch (Exception ex)
 
 底下是一個比較完整的範例：
 
-~~~~~~~~
+~~~~~~~~csharp
 using System;
 using System.IO;
 using System.Threading.Tasks;

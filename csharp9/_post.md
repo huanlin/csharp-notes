@@ -12,7 +12,7 @@
 
 C# 9 之前的寫法：
 
-~~~~~~~~
+~~~~~~~~csharp
 using System;
 
 class Program
@@ -26,7 +26,7 @@ class Program
 
 C# 9 之後只要兩行：
 
-~~~~~~~~
+~~~~~~~~csharp
 using System;
 Console.WriteLine ("Hello, world");
 ~~~~~~~~
@@ -35,7 +35,7 @@ Console.WriteLine ("Hello, world");
 
 範例：
 
-~~~~~~~~
+~~~~~~~~csharp
 Hello(args.Length > 0 ? args[0] : ""); 
 
 static void Hello(string arg)
@@ -75,7 +75,7 @@ Helo 2
 
 如要限定某個屬性只能在物件初始化的過程中賦值（即 init-only 屬性），只要在宣告屬性的時候把關鍵字 `set` 改為 `init` 即可。參考以下範例：
 
-~~~~~~~~
+~~~~~~~~csharp
 class Student
 {
     public int Id { get; init; } = 1; // OK!
@@ -94,7 +94,7 @@ class Student
 
 以下範例則是透過物件初始設定式來賦值：
 
-~~~~~~~~
+~~~~~~~~csharp
 var john = new Student { Id = 3 }; // OK!
 john.Id = 2; // 編譯失敗! 不可修改此屬性值。
 ~~~~~~~~
@@ -103,7 +103,7 @@ john.Id = 2; // 編譯失敗! 不可修改此屬性值。
 
 唯讀屬性與 init-only 屬性的行為類似，但唯讀屬性有個缺點：如果透過建構式的參數來設定初始值，可能會增加日後修改的麻煩。例如：
 
-~~~~~~~~cs
+~~~~~~~~csharp
 class Student
 {
     public int Id { get; };

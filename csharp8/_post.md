@@ -761,6 +761,7 @@ IEnumerable<int> GetNumbers()
 ~~~~~~~~
 
 > 試試看：https://dotnetfiddle.net/Kj1SSA
+> 備註：此範例使用了 C# 9 的「頂層語句」寫法。
 
 觀察重點是程式執行的流程：由於使用了 `yield return`，使得 `GetNumbers` 函式的執行流程被切成三段（因為回傳的串列元素總數為 3）。
 

@@ -112,7 +112,7 @@ Tuple(T1, T2, T3, T4, T5, T6, T7, TRest)
 public (string name, int age) GetEmpInfo() // C# 7
 {
     // 建立回傳的 Tuple 物件
-~~    return Tuple.Create("王大同", 50);~~
+<del>    return Tuple.Create("王大同", 50);</del>
     return ("王大同", 50);
 }
 

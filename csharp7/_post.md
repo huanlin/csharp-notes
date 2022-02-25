@@ -108,11 +108,11 @@ Tuple(T1, T2, T3, T4, T5, T6, T7, TRest)
 `Tuple` 類別有個明顯的缺點：我們必須以 `Item1`、`Item2`...`ItemN` 的方式來取得其內部元素（沒有 `Item0`）。也就是說，無法用有意義的名稱來存取其內部元素，這種寫法實在稱不上易讀易懂。於是，C# 7 在這方面提供了更簡明的語法。剛才的範例可用 C# 7 的 tuple 語法改寫如下：
 
 ~~~~~~~~csharp
-~~public Tuple<string, int> GetEmpInfo()  // 指定回傳型別~~
+// public Tuple<string, int> GetEmpInfo()  // 指定回傳型別~~
 public (string name, int age) GetEmpInfo() // C# 7
 {
     // 建立回傳的 Tuple 物件
-<del>    return Tuple.Create("王大同", 50);</del>
+//  return Tuple.Create("王大同", 50);
     return ("王大同", 50);
 }
 
@@ -120,7 +120,7 @@ public void ShowEmpInfo()
 {
     var emp = GetEmpInfo();
     // 使用 Tuple 物件的內容
-~~    Console.WriteLine($"{emp.Item1} {emp.Item2}");~~
+//  Console.WriteLine($"{emp.Item1} {emp.Item2}");
     Console.WriteLine($"{emp.name} {emp.age}"); // "王大同 50"
 }
 ~~~~~~~~

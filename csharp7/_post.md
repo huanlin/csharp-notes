@@ -108,7 +108,7 @@ Tuple(T1, T2, T3, T4, T5, T6, T7, TRest)
 `Tuple` 類別有個明顯的缺點：我們必須以 `Item1`、`Item2`...`ItemN` 的方式來取得其內部元素（沒有 `Item0`）。也就是說，無法用有意義的名稱來存取其內部元素，這種寫法實在稱不上易讀易懂。於是，C# 7 在這方面提供了更簡明的語法。剛才的範例可用 C# 7 的 tuple 語法改寫如下：
 
 ~~~~~~~~csharp
-// public Tuple<string, int> GetEmpInfo()  // 指定回傳型別~~
+// public Tuple<string, int> GetEmpInfo()  // 指定回傳型別
 public (string name, int age) GetEmpInfo() // C# 7
 {
     // 建立回傳的 Tuple 物件
@@ -247,14 +247,14 @@ C# 7 新增了一種叫做「分解式」（deconstructor）的方法，方法�
 
 沿用上一節的範例，這次只是稍微修改先前的 `ShowEmpInfo()` 函式：
 
-~~~~~~
+~~~~~~~~csharp
 void ShowEmpInfo()
 {
     var emp = ("王大同", 50);     // tuple literal
     var (empName, empAge) = emp; // 分解式
     Console.WriteLine($"{empName} {empAge}"); // 王大同 50
 }
-~~~~~~
+~~~~~~~~
 
 請看第 4 行，等號的右邊是一個 `Tuple` 物件。在等號的左邊，則使用了所謂的分解式宣告（deconstruction declaration）的語法。這行程式碼的作用是：把一個 `Tuple` 物件裡面的元素依序指派給等號左邊的括弧中宣告的變數。然後，我們就可以直接使用這些變數（第 5 行）。
 
@@ -678,7 +678,7 @@ int num = 0b_1111000011110000;   // C# 7.1 編譯失敗；C# 7.2 OK
 
 如果您已經很熟悉「傳址」的用法，可以跳過下面這個範例。
 
-~~~~~~
+~~~~~~~~csharp
 static void Main() 
 {
     int x = 0;
@@ -692,7 +692,7 @@ static void ChangePosition(ref int m, ref int n)
     m = 10;
     n = 20;
 }
-~~~~~~
+~~~~~~~~
 
 從 C# 7 開始，除了用來指出參數的傳遞方式，`ref` 關鍵字還可以用在兩個地方：區域變數、回傳值。這兩種用法有專屬的稱呼，分別是 **ref local**（ref 區域變數）和 **ref return**（ref 回傳值）。
 

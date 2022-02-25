@@ -9,7 +9,7 @@
 - [C# 6](csharp6/_post.md)
 - [C# 7](csharp7/_post.md)
 - [C# 8](csharp8/_post.md)
-- C# 9 (TODO)
+- [C# 9](csharp9/_post.md)
 - [C# 10](csharp10)
 
 ## 檔案目錄結構

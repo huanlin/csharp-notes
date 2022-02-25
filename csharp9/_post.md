@@ -125,13 +125,23 @@ class Student
 
 需要自訂型別的時候，除了類別（class）、結構（struct），現在我們還有一個選擇：**記錄（record）**，其主要用途是封裝資料，特別是不可改變的資料（immutable data）。
 
-範例：
+底下是一個簡單範例：
 
+~~~~~~~~csharp
+public record Student
+{
+    public int Id { get; set; }
+    public string Name { get; set; }
+}
 ~~~~~~~~
 
+你可以看到，除了 `record` 關鍵字，其餘寫法就和類別沒有兩樣。不過，像這種比較簡單的場合，記錄的寫法還可以更簡潔，甚至只需要一行程式碼就能達到相同目的：
+
+~~~~~~~~csharp
+public record Student (int Id, string Name);
 ~~~~~~~~
 
-
+除了寫法可以更簡潔，記錄只是比較特殊的類別。它跟類別一樣可以繼承，也可以宣告成 `abstract record`。事實上，編譯器就是以類別
 
 ---
 

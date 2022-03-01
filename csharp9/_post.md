@@ -73,7 +73,7 @@ Helo 2
 
 ## new 物件時可省略型別
 
-這項功能的正式名稱是 target-typed new expressions。以比較口語的方式來說，具式 new 一個物件的時候可以省略型別。
+這項功能的正式名稱是 target-typed new expressions。以比較口語的方式來說，即 new 一個物件的時候可以省略型別。
 
 以下範例展示了兩種「口味」：
 

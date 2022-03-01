@@ -58,7 +58,7 @@ Console.WriteLine("Hello 2");
 
 ~~~~~~~~
 Hello
-Helo 2
+Hello 2
 ~~~~~~~~
 
 > 試試看：https://dotnetfiddle.net/htGaC9

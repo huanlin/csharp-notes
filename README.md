@@ -6,10 +6,10 @@
 
 ## 索引
 
-- [C# 6](csharp6/_post.md)
-- [C# 7](csharp7/_post.md)
-- [C# 8](csharp8/_post.md)
-- [C# 9](csharp9/_post.md)
+- [C# 6](csharp6/_post.md#c-6)
+- [C# 7](csharp7/_post.md#c-7)
+- [C# 8](csharp8/_post.md#c-8)
+- [C# 9](csharp9/_post.md#c-9)
 - [C# 10](csharp10)
 
 ## 檔案目錄結構

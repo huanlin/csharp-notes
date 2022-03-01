@@ -82,14 +82,20 @@ var sb1 = new StringBuilder("abc");
 StringBuilder sb2 = new ("abc"); // C# 9
 ~~~~~~~~
 
-兩種寫法差不多，建立物件時都只需要寫一次型別。但有些時候，只有 C# 新增的寫法才能省略型別，例如變數的宣告與初始化動作分開撰寫的場合：
+兩種寫法差不多，建立物件時都只需要寫一次型別。但有些時候，這種省略型別的寫法特別有用，例如變數的宣告與初始化動作分開撰寫的場合：
 
 ~~~~~~~~csharp
 class Foo
 {
     StringBuilder sb;
-    public Foo(string initStr) => sb = new (initStr);
+    public Foo(string s) => sb = new (s);
 }
+~~~~~~~~
+
+在 C# 8 或更早的版本，第 4 行勢必得打多一點字：
+
+~~~~~~~~csharp
+    public Foo(string s) => sb = new StringBuilder(s);
 ~~~~~~~~
 
 基本上，只要編譯器能夠推斷變數的型別，`new` 後面就可以省略型別。所以底下這樣寫也行：

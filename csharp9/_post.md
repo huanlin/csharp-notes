@@ -567,7 +567,7 @@ Student s1 = new Student() { Name="John", StudentId=1};
 Student s2 = s1.Clone(); // OK!
 ~~~~~~~~
 
-// 試試看：https://dotnetfiddle.net/1EOSEW
+> 試試看：https://dotnetfiddle.net/1EOSEW
 
 ## IEnumerator 更容易支援 foreach
 

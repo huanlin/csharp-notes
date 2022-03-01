@@ -908,4 +908,5 @@ while (await e.MoveNextAsync())
 
 ～END～
 
-👉[返回首頁](https://github.com/huanlin/LearningNotes#readme)
+⬆️[回頂端](https://github.com/huanlin/LearningNotes/blob/main/csharp8/_post.md#c-8)
+↩️[回首頁](https://github.com/huanlin/LearningNotes#readme)

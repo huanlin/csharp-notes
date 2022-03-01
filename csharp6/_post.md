@@ -636,4 +636,5 @@ static async Task LogAsync(string s)
 
 ～END～
 
-👉[返回首頁](https://github.com/huanlin/LearningNotes#readme)
+⬆️[回頂端](https://github.com/huanlin/LearningNotes/blob/main/csharp6/_post.md#c-6)
+↩️[回首頁](https://github.com/huanlin/LearningNotes#readme)

@@ -92,7 +92,7 @@ class Foo
 }
 ~~~~~~~~
 
-在 C# 8 或更早的版本，第 4 行勢必得打多一點字：
+在 C# 8 或更早的版本，第 4 行勢必得多打一些字：
 
 ~~~~~~~~csharp
     public Foo(string s) => sb = new StringBuilder(s);

@@ -147,7 +147,7 @@ global using global::System.Threading.Tasks;
 
 > 我個人不是很喜歡編輯 XML，所以偏好使用一個 C# 檔案來管理整個專案的 `global using` 語句。如此一來，如果發現命名空間衝突，或者有任何疑慮時，只要打開我建立的那個 GlobalUsings.cs 檔案，便可一目瞭然。
 
-重點整理：
+**重點整理：**
 
 - `global using`（全域引用）是 C# 10 新增的語法，其用途是將指定的命名空間套用於整個專案。如此一來，那些常用的命名空間可以只寫一次 `using` 語句，而不用在每一個 C# 檔案裡面重複寫。
 - 專案的 .csproj 檔案中的 `<ImplicitUsings>` 可用來控制是否啟用 .NET SDK 的「隱含引用」功能。若啟用，編譯專案的時候就會自動產生一個名為 *[專案名稱]*.GlobalUsings.g.cs 的檔案，裡面有一些常用命名空間的 `global using` 語句。此外，.csproj 檔案裡面也可以透過 `<Using>` 元素來增加或移除全域引用的命名空間。

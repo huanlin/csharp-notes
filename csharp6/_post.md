@@ -634,6 +634,8 @@ static async Task LogAsync(string s)
 
 > 範例原始碼：[DemoExceptionAwait](examples/DemoExceptionAwait)。
 
+---
+
 ～END～
 
 ⬆️[回頂端](https://github.com/huanlin/LearningNotes/blob/main/csharp6/_post.md#c-6)

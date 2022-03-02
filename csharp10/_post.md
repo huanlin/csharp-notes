@@ -109,11 +109,9 @@ global using global::System.Threading.Tasks;
  
 現在我們知道了，原來「隱含引用」這項功能，背後其實使用了一種叫做 `global using` 的語法。那麼，我們是否可以「棄暗投明」，在自己的專案裡面明白地撰寫這些「全域引用」呢？答案是肯定的。
  
-### global using 語法
+### 使用 C# 檔案來管理全域引用
  
-`global using`（全域引用）是 C# 10 新增的語法，其用途是將指定的命名空間套用於整個專案。換言之，A 專案裡面的 `global using` 語句不會影響到 B 專案或其他專案。
-
-我們可以使用一個 C# 檔案來集中管理這些 `global using` 語句，具體作法如下：
+我們可以使用一個 C# 檔案來集中管理 `global using` 語句，具體作法如下。
  
 首先，開啟專案的 .csproj 檔案，把 `<ImplicitUsings>enable</ImplicitUsings>` 整行刪除，或將其屬性值改為 `disable`。也就是說，不要使用 Visual Studio 專案範本所提供的那些預設的全域命名空間。
  
@@ -121,7 +119,7 @@ global using global::System.Threading.Tasks;
 
 ![](images/global-using-ide.png)
 
-### 在專案檔中管理全域引用
+### 透過專案檔來管理全域引用
 
 除了使用剛才示範的 GlobalUsings.cs 檔案，我們也可以在 .csproj 裡面使用 `<Using>` 元素來增加或移除全域的命名空間。參考以下範例：
  
@@ -147,8 +145,15 @@ global using global::System.Threading.Tasks;
 - 第 11 行：把 `MyLib.Extensions` 加入全域引用名單。
 - 第 12 行：把 `System.Net.Http` 從全域引用名單中移除。也就是說，如果 `<ImplicitUsings>` 所產生的全域引用名單裡面有 `System.Net.Http`，便將它移除。
 
-我個人不是很喜歡編輯 XML，所以偏好使用一個 C# 檔案來管理整個專案的 `global using` 語句。如此一來，如果發現命名空間衝突，或者有任何疑慮時，只要打開我建立的那個 GlobalUsings.cs 檔案，便可一目瞭然。
- 
+> 我個人不是很喜歡編輯 XML，所以偏好使用一個 C# 檔案來管理整個專案的 `global using` 語句。如此一來，如果發現命名空間衝突，或者有任何疑慮時，只要打開我建立的那個 GlobalUsings.cs 檔案，便可一目瞭然。
+
+重點整理：
+
+- `global using`（全域引用）是 C# 10 新增的語法，其用途是將指定的命名空間套用於整個專案。如此一來，那些常用的命名空間可以只寫一次 `using` 語句，而不用在每一個 C# 檔案裡面重複寫。
+- 專案的 .csproj 檔案中的 `<ImplicitUsings>` 可用來控制是否啟用 .NET SDK 的「隱含引用」功能。若啟用，編譯專案的時候就會自動產生一個名為 *[專案名稱]*.GlobalUsings.g.cs 的檔案，裡面有一些常用命名空間的 `global using` 語句。此外，.csproj 檔案裡面也可以透過 `<Using>` 元素來增加或移除全域引用的命名空間。
+- 我們也可以用一個 C# 檔案來集中管理全域引用的命名空間。
+- 全域引用的有效範圍是「這個專案」。換言之，A 專案裡面的 `global using` 語句不會影響到 B 專案或其他專案。
+
 ## 匿名型別的非破壞式變形
 
 non-destructive mutation for anonymous types

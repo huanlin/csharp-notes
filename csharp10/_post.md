@@ -146,11 +146,11 @@ non-destructive mutation for anonymous types
 記錄（record）是從 C# 9 開始提供，而 C# 10 有兩處強化：
 
 1. 宣告記錄類型時，可明確指定以結構（struct）作為真實型別。
-2. 在記錄中改寫（override） `ToString` 方法時，可將其密封（sealed），以避免其他人——尤其是編譯器——改寫此方法。
+2. 在記錄中改寫 `ToString` 方法時，可將其密封（sealed），以避免其他人——尤其是編譯器——改寫此方法。
 
 接著對此兩處強化功能進一步說明。
 
-> 以下內容需要對 `record` 有基本的認識才比較好理解。可參閱 [C# 9 的〈記錄〉](https://github.com/huanlin/LearningNotes/blob/main/csharp9/_post.md#%E8%A8%98%E9%8C%84)一節的說明。
+> 以下內容需要具備 `record` 基礎知識，才比較好理解。可參閱 [C# 9 的〈記錄〉](https://github.com/huanlin/LearningNotes/blob/main/csharp9/_post.md#%E8%A8%98%E9%8C%84)一節的說明。
 
 ### 以結構實作的記錄
 
@@ -199,7 +199,7 @@ public record struct Point
 
 **基礎知識**：編譯器會幫我們自訂的 `record` 型別安插許多程式碼，其中包括[改寫的 `ToString` 方法](https://github.com/huanlin/LearningNotes/blob/main/csharp9/_post.md#tostring-%E6%96%B9%E6%B3%95)。
 
-然而，當我們有多個自訂的記錄類型，彼此之間有好幾層繼承關係時，編譯器提供的這項功能卻反倒會出問題：位於繼承階層頂端的基礎型別如果想要把 `ToString` 的輸出結果固定下來，不讓後代亂改，這在 C# 9 是辦不到的，因為編譯器總是會替子代記錄改寫 `ToString` 方法。
+然而，當我們有多個自訂的記錄類型，彼此之間有好幾層繼承關係時，編譯器提供的這項功能反倒會出問題：位於繼承階層頂端的記錄如果想要把 `ToString` 的輸出結果固定下來，不讓後代亂改，這在 C# 9 是辦不到的，因為編譯器總是會替子代記錄改寫 `ToString` 方法。
 
 於是有人想到，何不在基礎型別裡面加上 `sealed` 修飾詞來禁止後代修改呢？像這樣：
 

@@ -2,6 +2,8 @@
 
 本章要介紹的是 C# 10 的新增語法和改進之處，包括：
 
+- [File-scoped 命名空間](#File-scoped-命名空間)
+- [全域引用](#全域引用)
 - [其他改進](#其他改進)
 
 **注意**：.NET 6 或更新的版本才有支援 C# 10。本章若有提及 Visual Studio，皆是指 Visual Studio 2022。
@@ -44,13 +46,7 @@ Visual Studio 編輯器的預設值是「Block scoped」。你可以為 solution
     // See https://aka.ms/new-console-template for more information
     Console.WriteLine("Hello, World!");
 
-如果點開註解當中的那條網址，會帶我們到一份[微軟文件](https://aka.ms/new-console-template)，而該文件的中文版標題是「新的 C# 範本會產生最上層的語句」，如下圖：
- 
-![](images/global-using-ms-article.png)
- 
-如果你還沒有在專案中使用 C# 10 新增的 using 語法，不妨把那篇文章從頭到尾瀏覽一遍，以大致了解有哪些方便的 using 語法。底下僅整理幾個重點，希望有助於快速掌握其用法。
- 
-首先，程式裡面直接寫 `Console.WriteLine(...)` 而沒有 `using System` 命名空間，這是使用了 .NET 6 的「隱含引用」（implicit using）功能。那麼，這些隱含引用的命名空間是隱藏在哪裡呢？
+程式裡面使用了 `Console.WriteLine(...)` 卻沒有 `using System` 命名空間，這是使用了 .NET 6 的「隱含引用」（implicit using）功能。那麼，這些隱含引用的命名空間是隱藏在哪裡呢？
 
 當專案編譯之後，我們可以在專案目錄下的「obj\Debug\目標框架\」目錄下找到隱含引用的檔案，名稱是 [專案名稱].GlobalUsings.g.cs。如下圖：
  
@@ -133,8 +129,25 @@ global using global::System.Threading.Tasks;
 
 non-destructive mutation for anonymous types
 
-## 分解式的新語法
+## 分解式的改進
 
+閱讀以下程式片段：
+
+~~~~~~~~csharp
+var student = (Id: 1, Name: "Mike"); // tuple
+(int id, string name) = student;     // 分解
+Console.WriteLine($"{id}-{name}"); // "1-Mike"
+~~~~~~~~
+
+第 1 行程式碼建立了一個 tuple，接著第 2 行將此 tuple 分解為兩個變數 `id` 和 `name`。在 C# 10 之前，第 2 行用來承接分解結果的變數必須全部宣告在一對括弧裡面。到了 C# 10，此限制被放寬了，可以這樣寫：
+
+~~~~~~~~csharp
+string name; 
+var student = (Id: 1, Name: "Mike");
+(int id, name) = student; // C# 9 編譯失敗，C# 10 OK!
+~~~~~~~~
+
+也就是說，物件分解的結果可以全部宣告在一對括弧中，也可以混合其他變數。
 
 ## 結構的改進
 

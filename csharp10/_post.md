@@ -154,9 +154,9 @@ non-destructive mutation for anonymous types
 
 ### 以結構實作的記錄
 
-記錄（record）類型是從 C# 9 開始提供，其編譯後的程式碼是以類別的形式存在，所以是參考型別。
+記錄（record）類型是從 C# 9 開始提供，其編譯後的程式碼是以**類別**的形式存在，所以是參考型別。
 
-C# 10 新增了 `record struct` 語法，讓我們能夠指定使用結構來作為實際型別。例如：
+C# 10 新增了 `record struct` 語法，讓我們能夠指定使用**結構**來作為實際型別。例如：
 
 ~~~~~~~~csharp
 public record struct Point(int X, int Y);
@@ -175,7 +175,7 @@ public struct Point : IEquatable<Point>
 
 **觀察重點 1**：此記錄類型是以結構來實現（第 1 行），所以它是個實質型別，而非參考型別。換言之，它也會有實質型別的限制，例如不支援繼承。
 
-**觀察重點 2**：以位置參數語法來定義的記錄，編譯器會自動產生對應的屬性；這些屬性並非唯讀，而是可以隨時修改的，如第 3～4 行的屬性 X 與 Y。這是 `record struct` 和單純宣告 `record` 的一個主要差異。
+**觀察重點 2**：以位置參數語法來定義的記錄，編譯器會自動產生對應的屬性；而編譯器為 `record struct` 產生的屬性並非唯讀，而是可以隨時修改的，如第 3～4 行的屬性 X 與 Y。這是 `record struct` 和單純宣告 `record` 的一個主要差異。
 
 如果基於某些原因而必須使用 `record struct`，同時又希望整個結構是唯讀的，此時有兩種作法，一個是在宣告時加上 `readonly` 關鍵字：
 
@@ -197,7 +197,7 @@ public record struct Point
 
 ### `ToString` 方法可被密封
 
-**基礎知識**：編譯器會幫我們自訂的 `record` 型別安插許多程式碼，其中包括[改寫的 `ToString` 方法](https://github.com/huanlin/LearningNotes/blob/main/csharp9/_post.md#tostring-%E6%96%B9%E6%B3%95)。
+**基礎知識**：編譯器會幫我們自訂的 `record` 類型安插許多程式碼，其中包括[改寫的 `ToString` 方法](https://github.com/huanlin/LearningNotes/blob/main/csharp9/_post.md#tostring-%E6%96%B9%E6%B3%95)。
 
 然而，當我們有多個自訂的記錄類型，彼此之間有好幾層繼承關係時，編譯器提供的這項功能反倒會出問題：位於繼承階層頂端的記錄如果想要把 `ToString` 的輸出結果固定下來，不讓後代亂改，這在 C# 9 是辦不到的，因為編譯器總是會替子代記錄改寫 `ToString` 方法。
 
@@ -217,7 +217,7 @@ abstract record Point(int X, int Y)
 
 > Error CS8773:	Feature 'sealed ToString in record' is not available in C# 9.0. 
 
-到了 C# 10，上列程式碼便可以通過編譯，而且更重要的是：可以防止他人（特別是編譯器）改寫父代記錄的方法。
+到了 C# 10，上列程式碼便可以通過編譯。如此一來，便可防止他人（特別是編譯器）改寫父代記錄的方法。
 
 > 實作此功能的 Thomas Levesque 曾在某個討論串中說：「this feature isn't really to prevent a user from overriding the method, but to prevent the compiler from doing so.」
 

@@ -176,7 +176,7 @@ non-destructive mutation for anonymous types
 
 ## Lambda 語法的改進
 
-C# 10 的 lambda 語法有幾處改進，首先要介紹的是自動推斷委派型別（inferred delegate type）。範例：
+C# 10 的 lambda 語法有幾處改進，首先要介紹的是**自動推斷委派型別**（inferred delegate type）。範例：
 
 ~~~~~~~~csharp
 Func<string> hello = () => "Hello World"; 
@@ -229,9 +229,9 @@ var fn3 = [Description("是在哈囉")]
 
 說明：
 
-1. 為 'fn1' 的匿名方法加上說明文字。
-2. 為 'fn2' 的匿名方法加上參數的說明文字。
-3. 為 'fn3' 的匿名方法、參數、回傳型別都加上說明文字。
+1. 為 `fn1` 的匿名方法加上說明文字。
+2. 為 `fn2` 的匿名方法加上參數的說明文字。
+3. 為 `fn3` 的匿名方法、參數、回傳型別都加上說明文字。
 
 使用時機：某些 API 會去判斷傳入的委派方法是否套用了某些特徵項而有不同的行為，此時便可使用 C# 10 新增的 lambda 特徵項語法來撰寫匿名方法，而不用像以前那樣非得撰寫具名方法不可。
 

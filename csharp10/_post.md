@@ -4,7 +4,11 @@
 
 - [File-scoped 命名空間](#File-scoped-命名空間)
 - [全域引用](#全域引用)
+- [字串常數可以插補](#字串常數可以插補)
+- [Lambda 語法的改進](#Lambda-語法的改進)
 - [分解式的改進](#分解式的改進)
+- [記錄的改進](#記錄的改進)
+- [結構的改進](#結構的改進)
 - [其他改進](#其他改進)
 
 **注意**：.NET 6 或更新的版本才有支援 C# 10。本章若有提及 Visual Studio，皆是指 Visual Studio 2022。
@@ -154,9 +158,82 @@ global using global::System.Threading.Tasks;
 - 我們也可以用一個 C# 檔案來集中管理全域引用的命名空間。
 - 全域引用的有效範圍是「這個專案」。換言之，A 專案裡面的 `global using` 語句不會影響到 B 專案或其他專案。
 
+## 字串常數可以插補
+
+C# 9 不允許字串常數使用字串插補（string interpolation，或「字串插值」），例如：
+
+~~~~~~~~csharp
+const string AppName = "我的程式";
+const string Version = "1.0";
+const string ProductName = $"{AppName} {VersionName}";
+~~~~~~~~
+
+第 3 行在 C# 9 無法通過編譯，從 C# 10 開始則沒有問題。
+
 ## 匿名型別的非破壞式變形
 
 non-destructive mutation for anonymous types
+
+## Lambda 語法的改進
+
+C# 10 的 lambda 語法有幾處改進，首先要介紹的是自動推斷委派型別（inferred delegate type）。範例：
+
+~~~~~~~~csharp
+Func<string> hello = () => "Hello World"; 
+Console.WriteLine(hello());
+~~~~~~~~
+
+此範例在 C# 9 可以通過編譯。到了 C# 10，則因為編譯器能夠自動推斷委派型別而可以使用 `var` 來宣告委派變數，像這樣：
+
+~~~~~~~~csharp
+var hello = () => "Hello World"; // C# 9 無法編譯!
+~~~~~~~~
+
+如果委派的回傳值為 null，編譯器自然無法判定你想回傳什麼型別，例如：
+
+~~~~~~~~csharp
+var hello = () => null; // 無法編譯!
+~~~~~~~~
+
+此時如果還是想要用 `var` 來宣告變數型別，則可以撰寫 lambda 表達式的時候宣告回傳型別：
+
+~~~~~~~~csharp
+var hello = string? () => null; // OK!
+~~~~~~~~
+
+當你的程式有很複雜的巢狀 lambda 語句，便可使用這種明確宣告回傳型別的方式來加快編譯速度。這是 lambda 語法的第二項改進。
+
+第三項改進是當我們把 lambda 表達式傳入某方法的參數時，參數型別可以是 `object`、`Delegate`、或 `Expression`：
+
+~~~~~~~~csharp
+M1(() => "test"); // Func<string>
+M2(() => "test"); // Func<string>
+M3(() => "test"); // Expression<Func<string>>
+
+void M1(object x) { }
+void M2(Delegate x) { }
+void M3(Expression x) { }
+~~~~~~~~
+
+在 C# 9，第 1 行至第 3 行都無法通過編譯（無法將 lambda 表達式轉換成目標參數型別），C# 10 則沒有問題。
+
+最後一項改進是，lambda 表達式從現在開始可以套用特徵項（attribute），包括匿名方法、方法參數、以及回傳值，皆可套用。範例：
+
+~~~~~~~~csharp
+var fn1 = [Description("是在哈囉")] () => "Hello";
+var fn2 = ([Description("參數") string s) => "Hello " + s;
+var fn3 = [Description("是在哈囉")] 
+          [return: Description("回傳字串")]
+          ([Description("參數")] string s) => "Hello " + s;
+~~~~~~~~
+
+說明：
+
+1. 為 'fn1' 的匿名方法加上說明文字。
+2. 為 'fn2' 的匿名方法加上參數的說明文字。
+3. 為 'fn3' 的匿名方法、參數、回傳型別都加上說明文字。
+
+使用時機：某些 API 會去判斷傳入的委派方法是否套用了某些特徵項而有不同的行為，此時便可使用 C# 10 新增的 lambda 特徵項語法來撰寫匿名方法，而不用像以前那樣非得撰寫具名方法不可。
 
 ## 分解式的改進
 
@@ -177,11 +254,6 @@ var student = (Id: 1, Name: "Mike");
 ~~~~~~~~
 
 也就是說，物件分解的結果可以全部宣告在一對括弧中，也可以混合其他變數。
-
-## 結構的改進
-
-欄位初始設定式
-無參數建構式
 
 ## 記錄的改進
 
@@ -262,6 +334,36 @@ abstract record Point(int X, int Y)
 到了 C# 10，上列程式碼便可以通過編譯。如此一來，便可防止他人（特別是編譯器）改寫父代記錄的方法。
 
 > 實作此功能的 Thomas Levesque 曾在某個討論串中說：「this feature isn't really to prevent a user from overriding the method, but to prevent the compiler from doing so.」
+
+## 結構的改進
+
+C# 10 的結構（struct）類型有兩處改進：無參數建構式、可使用 `with` 語法來進行初始化。
+
+範例：
+
+~~~~~~~~csharp
+public struct Point
+{
+    public int X { get; set; }
+    public int Y { get; set; }
+    
+    public Point() // C# 9 無法編譯!
+    {
+        X = 5;
+        Y = 5;
+    }
+}
+~~~~~~~~
+
+第 6 行看起來沒什麼特別，只是不帶參數的建構式罷了，這在類別很常見，但 C# 9 的結構不允許這樣寫，到 C# 10 才可以。
+
+接著看另一項改進：可使用 `with` 語法來進行初始化。
+
+~~~~~~~~csharp
+var p1 = new Point { X = 0, Y = 0 };
+var p2 = point1 with { X = 5 }; // C# 9 不支援，C# 10 OK!
+~~~~~~~~
+
 
 ## 巢狀屬性樣式 nested property patterns
 

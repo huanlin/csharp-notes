@@ -465,20 +465,23 @@ System.ArgumentException: 1 + 1 == 3 不是真的!
 這裡不妨順便複習一下其他 Caller* 特徵項（從 C# 5 便已提供）：
 
 ~~~~~~~~csharp
+Log("發生錯誤");
+
 void Log(
     string msg,
     [CallerMemberName] string caller = null, 
     [CallerFilePath] string filePath = null, 
     [CallerLineNumber] int lineNum = 0) 
 {
-    Console.WriteLine($"{msg}, 呼叫端: {caller}, 檔案: {filePath}, 程式行號: {lineNum}");
+    Console.WriteLine(
+        $"{msg}, 呼叫端: {caller}, 檔案: {filePath}, 行號: {lineNum}");
 }
 ~~~~~~~~
 
 執行結果：
 
 ~~~~~~~~
-發生錯誤, 呼叫端: Main, 檔案: Program.cs, 程式行號: 12
+發生錯誤, 呼叫端: Main, 檔案: Program.cs, 行號: 12
 ~~~~~~~~
 
 > 試試看：https://dotnetfiddle.net/wDYoVB

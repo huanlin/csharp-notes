@@ -12,6 +12,7 @@
 - [結構的改進](#結構的改進)
 - [`CallerArgumentExpression` 特徵項](#CallerArgumentExpression-特徵項)
 - [`AsyncMethodBuilder` 特徵項可套用至方法](#AsyncMethodBuilder-特徵項可套用至方法)
+- [其他改進](#其他改進)
 
 **注意**：.NET 6 或後續版本才有支援 C# 10。本章若有提及 Visual Studio，皆是指 Visual Studio 2022。
  
@@ -226,10 +227,6 @@ if (obj != null)
 
 ![](images/nested-property-pattern.png)
 
-## 匿名型別的非破壞式變形
-
-non-destructive mutation for anonymous types
-
 ## Lambda 語法的改進
 
 C# 10 的 lambda 語法有幾處改進，首先要介紹的是**自動推斷委派型別**（inferred delegate type）。範例：
@@ -420,6 +417,17 @@ var p1 = new Point { X = 0, Y = 0 };
 var p2 = point1 with { X = 5 }; // C# 9 不支援，C# 10 OK!
 ~~~~~~~~
 
+## 匿名型別的非破壞式變形
+
+C# 9 新增了 `with` 關鍵字來對記錄（record）執行非破壞式變形（non-destructive mutation）。到了 C# 10，這個語法也能用於匿名型別：
+
+~~~~~~~~csharp
+var obj1 = new { X = 1, Y = 2, Z = 3 };
+var obj2 = obj1 with { Y = 10 };
+Console.WriteLine (obj2); // { X = 1, Y = 10, Z = 3 }
+~~~~~~~~
+
+> 有關記錄的非破壞式變形語法，可參閱 C# 9 筆記的〈[記錄：複製物件](https://github.com/huanlin/LearningNotes/blob/main/csharp9/_post.md#%E8%A4%87%E8%A3%BD%E7%89%A9%E4%BB%B6)〉一節的說明。
 
 ## `CallerArgumentExpression` 特徵項
 
@@ -522,6 +530,12 @@ public class MyAsyncMethodBuilder
 - `void AwaitUnsafeOnCompleted<TAwaiter, TStateMachine>` 方法。
 
 以上僅為重點摘錄，如欲獲取更完整的說明，可參考官方文件〈[AsyncMethodBuilder override](https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/proposals/csharp-10.0/async-method-builders)〉，以及原始碼 [AsyncMethodBuilder.cs](https://referencesource.microsoft.com/#mscorlib/system/runtime/compilerservices/AsyncMethodBuilder.cs)。
+
+## 其他改進
+
+除了前面介紹的新功能，C# 10 還對既有的 `#line` 指示詞做了進一步強化。但這項功能對多數人而言幫助不大，可能只有在撰寫程式碼產生器的時候才會用到，所以這裡略過不提。
+
+如果你想要學習 `#line` 指示詞的用法，可參閱微軟文件：〈[Enhanced #line directives](https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/proposals/csharp-10.0/enhanced-line-directives)〉。
 
 ---
 

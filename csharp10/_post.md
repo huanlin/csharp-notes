@@ -11,7 +11,7 @@
 - [結構的改進](#結構的改進)
 - [其他改進](#其他改進)
 
-**注意**：.NET 6 或更新的版本才有支援 C# 10。本章若有提及 Visual Studio，皆是指 Visual Studio 2022。
+**注意**：.NET 6 或後續版本才有支援 C# 10。本章若有提及 Visual Studio，皆是指 Visual Studio 2022。
  
 ---
 
@@ -370,9 +370,40 @@ var p2 = point1 with { X = 5 }; // C# 9 不支援，C# 10 OK!
 ## CallerArgumentExpression
 
 
-## 其他新功能
+## `AsyncMethodBuilder` 特徵項可套用至方法 
 
+打從 C# 7 開始，`AsyncMethodBuilder` 特徵項便可以套用至類別。到了 C# 10，則可以套用至方法。此特徵項可用來告訴編譯器：「在處理非同步方法的時候，請改用我提供的類別來建構背後的非同步狀態機。」
 
+> 對於一般的應用程式而言，應該不太會用到這項功能。
+
+範例：
+
+~~~~~~~~csharp
+[AsyncMethodBuilder(typeof(MyAsyncMethodBuilder))]
+public void MyMethod()
+{
+}
+
+public class MyAsyncMethodBuilder
+{
+    public static MyAsyncMethodBuilder Create()
+        => new MyAsyncMethodBuilder();
+    
+    ...（其餘省略）
+}   
+~~~~~~~~
+
+此範例省略了 `MyAsyncMethodBuilder` 方法的實作。根據官方文件，此類別必須提供下列成員：
+
+- 靜態方法 `Create`，用來建立 `MyAsyncMethodBuilder` 的執行個體。
+- 屬性 `Task`，用來提供非同步工作的回傳型別。
+- `void SetException(Exception)` 方法，用來設定非同步工作失敗時的例外。
+- `void SetResult()` 或 `void SetResult(T result)` 方法，以標記工作完成，或者同時設定工作結果。
+- `void Start<TStateMachine>` 方法。
+- `void AwaitOnCompleted<TAwaiter, TStateMachine>` 方法。
+- `void AwaitUnsafeOnCompleted<TAwaiter, TStateMachine>` 方法。
+
+以上僅為重點摘錄，如欲獲取更完整的說明，可參考官方文件〈[AsyncMethodBuilder override](https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/proposals/csharp-10.0/async-method-builders)〉，以及原始碼 [AsyncMethodBuilder.cs](https://referencesource.microsoft.com/#mscorlib/system/runtime/compilerservices/AsyncMethodBuilder.cs)。
 
 ---
 

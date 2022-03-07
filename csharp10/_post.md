@@ -5,6 +5,7 @@
 - [File-scoped 命名空間](#File-scoped-命名空間)
 - [全域引用](#全域引用)
 - [字串常數插補](#字串常數插補)
+- [巢狀屬性樣式](#巢狀屬性樣式)
 - [Lambda 語法的改進](#Lambda-語法的改進)
 - [分解式的改進](#分解式的改進)
 - [記錄的改進](#記錄的改進)
@@ -169,6 +170,56 @@ const string ProductName = $"{AppName} {VersionName}";
 ~~~~~~~~
 
 第 3 行在 C# 9 無法通過編譯，從 C# 10 開始則沒有問題。
+
+## 巢狀屬性樣式
+
+在樣式比對的部分，C# 10 針對巢狀屬性的寫法進一步簡化。先來看一個沒有使用樣式比對的例子：
+
+~~~~~~~~csharp
+var obj = new Uri("https://www.huanlintalk.com");
+if (obj?.Scheme?.Length == 5 && obj?.Segments?.Length > 0)
+{
+    ...
+}
+~~~~~~~~
+
+在 C# 10 之前，如果要改用樣式比對語法，會這樣寫：
+
+~~~~~~~~csharp
+if (obj is Uri { Scheme: { Length: 5 }, Segments: { Length: > 0 } })
+~~~~~~~~
+
+結果比原本沒有樣式比對的寫法還要囉嗦！還好 C# 10 針對巢狀屬性的語法做了簡化，可以寫成：
+
+~~~~~~~~csharp
+if (obj is Uri { Scheme.Length: 5, Segments.Length: > 0 }) 
+~~~~~~~~
+
+事實上，還可以再簡化一點點，把型別省略：
+
+~~~~~~~~csharp
+if (obj is { Scheme.Length: 5, Segments.Length: > 0 }) 
+~~~~~~~~
+
+這樣就真的比較簡潔了。剛才的最後兩個使用巢狀屬性的範例，編譯器會幫我們轉譯成類似底下的程式碼，可以看到所有必要的 null 檢查都幫我們做了：
+
+~~~~~~~~csharp
+if (obj != null)
+{
+    string scheme = obj.scheme;
+    if (scheme != null && scheme.Length == 5)
+    {
+        string[] segments = obj.Segments;
+        if (segments != null)
+        {
+            if (segments.Length > 0) 
+            {
+                // 至此全部的比對條件成立
+            }
+        }
+    }
+}
+~~~~~~~~
 
 ## 匿名型別的非破壞式變形
 
@@ -364,8 +415,6 @@ var p1 = new Point { X = 0, Y = 0 };
 var p2 = point1 with { X = 5 }; // C# 9 不支援，C# 10 OK!
 ~~~~~~~~
 
-
-## 巢狀屬性樣式 nested property patterns
 
 ## CallerArgumentExpression
 

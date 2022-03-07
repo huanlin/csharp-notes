@@ -423,7 +423,7 @@ var p2 = point1 with { X = 5 }; // C# 9 不支援，C# 10 OK!
 
 ## `CallerArgumentExpression` 特徵項
 
-`CallerArgumentExpression` 特徵項可用來捕捉函式中的某個傳入參數的表達式，並將其表達式保存於另一個字串參數。範例：
+`[CallerArgumentExpression]` 特徵項可用來捕捉函式中的某個傳入參數的表達式，並將其表達式保存於另一個字串參數。範例：
 
 ~~~~~~~~csharp
 Show(Math.Sqrt(9)); // 取平方根
@@ -439,7 +439,7 @@ void Show(double num,
 Math.Sqrt(9) = 3
 ~~~~~~~~
 
-從這個例子可以看得出來，呼叫端傳入 `num` 參數的時候是怎麼寫的，當時的寫法就會被捕捉並保存於字串參數 `expr`。由於不需要呼叫端傳入 `expr` 參數，故此參數在宣告的時候必須給一個預設值（通常是 `null`）。
+從這個例子可以看得出來，呼叫端傳入 `num` 參數的時候是怎麼寫的，當時的寫法就會被捕捉並保存於字串參數 `expr`。由於不需要呼叫端傳入 `expr` 參數，故此參數在宣告的時候必須給一個預設值（通常是 `null`）。此外，`[CallerArgumentExpression]` 可以在同一個方法當中使用多次，亦即可捕捉多個參數。
 
 這項功能對於測試、驗證、或輸出記錄（log）訊息的場合特別有用。例如：
 

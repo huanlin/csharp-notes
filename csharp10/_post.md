@@ -10,7 +10,8 @@
 - [分解式的改進](#分解式的改進)
 - [記錄的改進](#記錄的改進)
 - [結構的改進](#結構的改進)
-- [其他改進](#其他改進)
+- [`CallerArgumentExpression` 特徵項](#CallerArgumentExpression-特徵項)
+- [`AsyncMethodBuilder` 特徵項可套用至方法](#AsyncMethodBuilder-特徵項可套用至方法)
 
 **注意**：.NET 6 或後續版本才有支援 C# 10。本章若有提及 Visual Studio，皆是指 Visual Studio 2022。
  
@@ -173,7 +174,7 @@ const string ProductName = $"{AppName} {VersionName}";
 
 ## 巢狀屬性樣式
 
-在樣式比對的部分，C# 10 針對巢狀屬性的寫法進一步簡化。先來看一個沒有使用樣式比對的例子：
+在樣式比對的部分，C# 10 針對巢狀屬性的寫法有了進一步簡化。先來看一個沒有使用樣式比對的例子：
 
 ~~~~~~~~csharp
 var obj = new Uri("https://www.huanlintalk.com");
@@ -201,7 +202,7 @@ if (obj is Uri { Scheme.Length: 5, Segments.Length: > 0 })
 if (obj is { Scheme.Length: 5, Segments.Length: > 0 }) 
 ~~~~~~~~
 
-這樣就真的比較簡潔了。剛才的最後兩個使用巢狀屬性的範例，編譯器會幫我們轉譯成類似底下的程式碼，可以看到所有必要的 null 檢查都幫我們做了：
+這樣就真的比較簡潔了。剛才的最後兩個使用巢狀屬性的寫法，編譯器會幫我們轉譯成類似底下的程式碼，可以看到所有必要的 null 檢查都幫我們處理了：
 
 ~~~~~~~~csharp
 if (obj != null)
@@ -220,6 +221,10 @@ if (obj != null)
     }
 }
 ~~~~~~~~
+
+最後把前面幾個範例整理成一張圖，方便快速複習：
+
+![](images/nested-property-pattern.png)
 
 ## 匿名型別的非破壞式變形
 
@@ -416,8 +421,67 @@ var p2 = point1 with { X = 5 }; // C# 9 不支援，C# 10 OK!
 ~~~~~~~~
 
 
-## CallerArgumentExpression
+## `CallerArgumentExpression` 特徵項
 
+`CallerArgumentExpression` 特徵項可用來捕捉函式中的某個傳入參數的表達式，並將其表達式保存於另一個字串參數。範例：
+
+~~~~~~~~csharp
+Show(Math.Sqrt(9)); // 取平方根
+
+void Show(double num,
+          [CallerArgumentExpression("num")] string expr = null)
+    => Console.WriteLine(expr + $" = {num}");
+~~~~~~~~
+
+執行結果：
+
+~~~~~~~~
+Math.Sqrt(9) = 3
+~~~~~~~~
+
+從這個例子可以看得出來，呼叫端傳入 `num` 參數的時候是怎麼寫的，當時的寫法就會被捕捉並保存於字串參數 `expr`。由於不需要呼叫端傳入 `expr` 參數，故此參數必須在宣告的時候就給一個預設值（通常是 `null`）。
+
+這項功能對於測試、驗證、或輸出記錄（log）訊息的場合特別有用。例如：
+
+~~~~~~~~csharp
+IsTrue(1 + 1 == 3);
+
+void IsTrue(bool value,
+[CallerArgumentExpression("value")] string expr = null)
+{
+    if (!value)
+        throw new ArgumentException($"{expr} 不是真的!");
+}
+~~~~~~~~
+
+執行結果：
+
+~~~~~~~~
+System.ArgumentException: 1 + 1 == 3 不是真的!
+~~~~~~~~
+
+> 試試看：https://dotnetfiddle.net/etlTWD
+
+這裡不妨順便複習一下其他 Caller* 特徵項（從 C# 5 便已提供）：
+
+~~~~~~~~csharp
+void Log(
+    string msg,
+    [CallerMemberName] string caller = null, 
+    [CallerFilePath] string filePath = null, 
+    [CallerLineNumber] int lineNum = 0) 
+{
+    Console.WriteLine($"{msg}, 呼叫端: {caller}, 檔案: {filePath}, 程式行號: {lineNum}");
+}
+~~~~~~~~
+
+執行結果：
+
+~~~~~~~~
+發生錯誤, 呼叫端: Main, 檔案: Program.cs, 程式行號: 12
+~~~~~~~~
+
+以上提及的 Caller* 特徵項皆隸屬於 `System.Runtime.CompilerServices` 命名空間。
 
 ## `AsyncMethodBuilder` 特徵項可套用至方法 
 

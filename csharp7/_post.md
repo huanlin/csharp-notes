@@ -1,5 +1,7 @@
 # C# 7 
 
+**👉任意門**：[C# 6](https://github.com/huanlin/LearningNotes/blob/main/csharp6/_post.md#c-6) | [C# 7](https://github.com/huanlin/LearningNotes/blob/main/csharp7/_post.md#c-7) | [C# 8](https://github.com/huanlin/LearningNotes/blob/main/csharp8/_post.md#c-8)  | [C# 9](https://github.com/huanlin/LearningNotes/blob/main/csharp9/_post.md#c-9) | [C# 10](https://github.com/huanlin/LearningNotes/blob/main/csharp10/_post.md#c-10) | [首頁](https://github.com/huanlin/LearningNotes#readme)
+
 本章要介紹的是 C# 7.0 至 7.3 的新增語法和改進之處。條列如下：
 
 - [宣告輸出變數](#宣告輸出變數) 

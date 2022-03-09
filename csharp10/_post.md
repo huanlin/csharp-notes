@@ -16,6 +16,8 @@
 
 **注意**：.NET 6 或後續版本才有支援 C# 10。本章若有提及 Visual Studio，皆是指 Visual Studio 2022。
  
+任意門：[C# 6](https://github.com/huanlin/LearningNotes/blob/main/csharp6/_post.md#c-6) ➡️ [C# 7](https://github.com/huanlin/LearningNotes/blob/main/csharp7/_post.md#c-7) ➡️ [C# 8](https://github.com/huanlin/LearningNotes/blob/main/csharp8/_post.md#c-8) ➡️ [C# 9](https://github.com/huanlin/LearningNotes/blob/main/csharp9/_post.md#c-9) ➡️ [C# 10](https://github.com/huanlin/LearningNotes/blob/main/csharp10/_post.md#c-10) ➡️ [首頁](https://github.com/huanlin/LearningNotes#readme)
+
 ---
 
 ## File-scoped 命名空間
@@ -152,7 +154,7 @@ global using global::System.Threading.Tasks;
 - 第 11 行：把 `MyLib.Extensions` 加入全域引用名單。
 - 第 12 行：把 `System.Net.Http` 從全域引用名單中移除。也就是說，如果 `<ImplicitUsings>` 所產生的全域引用名單裡面有 `System.Net.Http`，便將它移除。
 
-> 我個人不是很喜歡編輯 XML，所以偏好使用一個 C# 檔案來管理整個專案的 `global using` 語句。如此一來，如果發現命名空間衝突，或者有任何疑慮時，只要打開我建立的那個 GlobalUsings.cs 檔案，便可一目瞭然。
+> 我個人不是很喜歡編輯 XML，所以偏好使用一個 C# 檔案來管理整個專案的 `global using` 語句。一旦發生命名空間衝突，或有任何疑慮時，只要打開我建立的那個 GlobalUsings.cs 檔案，便可一目瞭然。
 
 **重點整理：**
 

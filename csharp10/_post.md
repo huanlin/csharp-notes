@@ -135,7 +135,7 @@ using System.IO;
 global using System; // 編譯失敗! 
 ~~~~~~~~
 
-順便提及，從 C# 6 開始提供的 [`using static`](https://github.com/huanlin/LearningNotes/blob/main/csharp6/_post.md#using-static-%E9%99%B3%E8%BF%B0%E5%BC%8F) 也同樣可以讓我們少打一些字，但其適用對象為「靜態成員」。二者可以混用，例如：
+順便提及，從 C# 6 開始提供的 [`using static`](https://github.com/huanlin/LearningNotes/blob/main/csharp6/_post.md#using-static-%E9%99%B3%E8%BF%B0%E5%BC%8F) 也同樣可以讓我們少打一些字，但其適用對象為「靜態成員」。它也可以跟 `global using` 搭配運用，例如：
 
 ~~~~~~~~csharp
 global using System;

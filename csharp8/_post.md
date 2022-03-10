@@ -908,7 +908,7 @@ while (await e.MoveNextAsync())
 
 ---
 
-～END～
+![創用 CC 授權條款](https://i.creativecommons.org/l/by-nc-nd/3.0/tw/88x31.png)
 
 ⬆️[回頂端](https://github.com/huanlin/LearningNotes/blob/main/csharp8/_post.md#c-8)
 ↩️[回首頁](https://github.com/huanlin/LearningNotes#readme)

@@ -128,6 +128,23 @@ global using global::System.Threading.Tasks;
 
 ![](images/global-using-ide.png)
 
+在同一個 C# 檔案裡面可以同時有 `using` 和 `global using` 語句，但 `global using` 必須寫在 `using` 之前，否則無法通過編譯。例如：
+
+~~~~~~~~csharp
+using System.IO;
+global using System; // 編譯失敗! 
+~~~~~~~~
+
+順便提及，從 C# 6 開始提供的 [`using static`](https://github.com/huanlin/LearningNotes/blob/main/csharp6/_post.md#using-static-%E9%99%B3%E8%BF%B0%E5%BC%8F) 也同樣可以讓我們少打一些字，但其適用對象為「靜態成員」。二者可以混用，例如：
+
+~~~~~~~~csharp
+global using System;
+global using static System.Console;
+~~~~~~~~
+
+- 第 1 行：整個專案的 C# 檔案都不用再撰寫 `using System`，便可使用該命名空間底下的所有型別。
+- 第 2 行：整個專案的 C# 檔案都可以直接使用 `System.Console` 類別的所有靜態成員，例如：`WriteLine("Hello")`。
+
 ### 透過專案檔來管理全域引用
 
 除了使用剛才示範的 GlobalUsings.cs 檔案，我們也可以在 .csproj 裡面使用 `<Using>` 元素來增加或移除全域的命名空間。參考以下範例：

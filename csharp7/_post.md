@@ -710,7 +710,7 @@ alias = 20;
 Console.WriteLine(origin); // 輸出 "20"
 
 origin = 30;
-Console.WriteLine(origin); // 輸出 "30"
+Console.WriteLine(alias); // 輸出 "30"
 ~~~~~~~~
 
 由此範例可以看得出來，每當 `alias` 的值改變，`origin` 也跟著改變；反之亦然。

@@ -17,8 +17,6 @@
 - [C# 10](csharp10/_post.md#c-10)
 - C# 11 (尚未開始)
 
-
-
 ## 參考資料
 
 C# 筆記的主要參考資料有：
@@ -39,9 +37,10 @@ C# 筆記的主要參考資料有：
 
 ## 贊助支持
 
-如果覺得我的文章有幫助，除了給一顆 GitHub 星星，您還可以透過以下方式來表達支持：
+除了給一顆 GitHub 星星，您還可以透過以下方式來贊助、支持：
 
 - 購買我的 C# 電子書，可透過這些平台：[Google Play](https://play.google.com/store/books/author?id=%E8%94%A1%E7%85%A5%E9%BA%9F)、[Leanpub](https://leanpub.com/u/michaeltsai)、[讀墨](https://readmoo.com/contributor/20072)、[Kobo](https://www.kobo.com/tw/zh/search?query=michael%20tsai&fcsearchfield=Author)。
-- 純粹贊助支持，可[至方格子平台打賞](https://vocus.cc/pay/donate/once/5c8e56a8fd8978000109280a)，或 [buy me a coffee](https://buymeacoffee.com/huanlin)。
+- [透過方格子平台打賞](https://vocus.cc/pay/donate/once/5c8e56a8fd8978000109280a)。
+- [透過 PayPayl 打賞](https://paypal.me/hltsai?country.x=TW&locale.x=zh_TW)。
 
 Happy learning!

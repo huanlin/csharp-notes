@@ -7,7 +7,7 @@ namespace StringInterpolationPerformanceTest
     {
         static void Main(string[] args)
         {
-        BenchmarkRunner.Run<StringInterpolBenchmark>();
+            BenchmarkRunner.Run<StringInterpolBenchmark>();
         }
     }
 }

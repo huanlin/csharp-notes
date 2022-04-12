@@ -18,9 +18,9 @@
 - [`async Main` 方法](#async-Main-方法) 
 - [`default` 運算式](#default-運算式)
 - [實質型別的參考語意](#實質型別的參考語意) 
-  - [`in` 參數]
-  - [唯讀結構]
-  - [只能放在堆疊的結構（ref struct）]
+  - [`in` 參數](#in-參數)
+  - [唯讀結構](#唯讀結構)
+  - [只能放在堆疊的結構：`ref struct`](#只能放在堆疊的結構-ref-struct)
 - [非後置的具名引數](#非後置的具名引數)
 - [`private protected` 修飾詞](#private-protected-修飾詞) 
 - [expression-bodied members 的改進](#expression-bodied-members-的改進)
@@ -1201,7 +1201,7 @@ public readonly struct Position // 改這行。
 >         public Foo(int y) => pos.Y = y;
 >     }
 
-### 只能放在堆疊的結構（ref struct）
+### 只能放在堆疊的結構：`ref struct`
 
 我們知道，使用 `class` 來宣告的型別是參考型別（reference types），而使用 `struct` 來宣告的型別則是實質型別（value types）。參考型別所使用的記憶體空間是所謂的「堆積」（heap），實質型別則會活在變數所宣告的區塊中；如果實質型別的變數是宣告在某個函式當中的區域變數或方法的傳入參數，那麼這些變數就會放在堆疊（stack）裡。例如：
 

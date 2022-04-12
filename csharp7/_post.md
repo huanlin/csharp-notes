@@ -20,7 +20,7 @@
 - [實質型別的參考語意](#實質型別的參考語意) 
   - [`in` 參數](#in-參數)
   - [唯讀結構](#唯讀結構)
-  - [只能放在堆疊的結構：`ref struct`](#只能放在堆疊的結構-ref-struct)
+  - [只能放在堆疊的結構：`ref struct`](#只能放在堆疊的結構ref-struct)
 - [非後置的具名引數](#非後置的具名引數)
 - [`private protected` 修飾詞](#private-protected-修飾詞) 
 - [expression-bodied members 的改進](#expression-bodied-members-的改進)

@@ -12,6 +12,8 @@
 - [分解式的改進](#分解式的改進)
 - [記錄的改進](#記錄的改進)
 - [結構的改進](#結構的改進)
+- [匿名型別的非破壞式變形](#匿名型別的非破壞式變形)
+- [字串插補的效能改進](#字串插補的效能改進)
 - [`CallerArgumentExpression` 特徵項](#CallerArgumentExpression-特徵項)
 - [`AsyncMethodBuilder` 特徵項可套用至方法](#AsyncMethodBuilder-特徵項可套用至方法)
 - [其他改進](#其他改進)
@@ -447,6 +449,154 @@ Console.WriteLine (obj2); // { X = 1, Y = 10, Z = 3 }
 ~~~~~~~~
 
 > 有關記錄的非破壞式變形語法，可參閱 C# 9 筆記的〈[記錄：複製物件](https://github.com/huanlin/LearningNotes/blob/main/csharp9/_post.md#%E8%A4%87%E8%A3%BD%E7%89%A9%E4%BB%B6)〉一節的說明。
+
+## 字串插補的效能改進
+
+C# 10 (.NET 6) 的字串插補，無論執行速度還是記憶體的使用效率，都比 C# 9 (.NET 5) 好很多。那麼，效能究竟提升多少呢？我用一個簡單的小程式來測試，結果發現 C# 10 的字串插補比 C# 9 快了大約一倍，而且使用的記憶體也更省。測試的過程與相關說明，請參考這個 Youtube 影片：[C# 10 (.NET 6) 字串插補的效能改進](https://www.youtube.com/watch?v=rXZGEmBk79c)。
+
+> 程式碼：[StringInterpolationPerformanceTest](https://github.com/huanlin/LearningNotes/tree/main/csharp10/examples/StringInterpolationPerformanceTest)。
+
+影片中用來觀察執行效能的 Today 方法，只是單純用字串插補來組成「今天是某年某月某日」的字串：
+
+~~~~~~~~csharp
+public string Today()
+{
+    var d = DateTime.Now;
+    return $"今天是 {d.Year} 年 {d.Month} 月 {d.Day} 日";
+}
+~~~~~~~~
+
+在 C# 9，上列程式碼會被編譯成這樣：
+
+~~~~~~~~csharp
+// C# 9 轉譯結果（使用 string.Format 方法）
+public string Today()
+{
+	DateTime d = DateTime.Now;
+	return string.Format("今天是 {0} 年 {1} 月 {2} 日", d.Year, d.Month, d.Day);
+}
+~~~~~~~~
+
+也就是說，C# 9 使用了 `string.Format()` 來實現字串插補，而此作法往往需要付出較高的成本。比如說，它必須額外配置一個陣列來存放引數、可能需要額外處理實質型別的裝箱（boxing）、無法減少非必要的字串建構……等等。
+
+> 什麼時候會碰到「非必要的字串建構」？一個常見的例子是輸出 Log 訊息的場合。稍後介紹字串處理器的時候會有進一步的說明。
+
+到了 C# 10，則採取不同的作法，其轉譯結果會像這樣：
+
+~~~~~~~~csharp
+// c# 10 轉譯結果
+public string Today()
+{
+	DateTime d = DateTime.Now;
+	var defaultInterpolatedStringHandler = new DefaultInterpolatedStringHandler(12, 3);
+	defaultInterpolatedStringHandler.AppendLiteral("今天是 ");
+	defaultInterpolatedStringHandler.AppendFormatted(d.Year);
+	defaultInterpolatedStringHandler.AppendLiteral(" 年 ");
+	defaultInterpolatedStringHandler.AppendFormatted(d.Month);
+	defaultInterpolatedStringHandler.AppendLiteral(" 月 ");
+	defaultInterpolatedStringHandler.AppendFormatted(d.Day);
+	defaultInterpolatedStringHandler.AppendLiteral(" 日");
+	return defaultInterpolatedStringHandler.ToStringAndClear();
+}
+~~~~~~~~
+
+程式碼變多了，執行速度卻更快，消耗的記憶體也更少。就如前面影片所展示的測試結果，整體效能比 C# 9 的字串插補提升了一倍左右。在頻繁使用字串插補的場合（例如迴圈），效能差距會更明顯。這樣的寫法有點 `StringBuilder` 的味道，對吧？只是這次完全由編譯器自動生成，不用我們自己手工一行一行去刻，而且實際負責組合字串的是 .NET 6 新加入的結構：`DefaultInterpolatedStringHandler`，也就是預設的字串插補處理器。
+
+## 字串插補處理器
+
+上一節末尾提到了 C# 10 的字串插補語法，其背後負責組合字串的是一個叫做 `DefaultInterpolatedStringHandler` 的結構。每當編譯器碰到字串插補語法時，便會使用這個預設的字串插補處理器來建構字串。這便是 C# 10 的字串插補效能大幅提升的主要原因。
+
+在某些特殊場合，我們甚至可以自行設計特定用途的字串插補處理器，以減少一些不必要的字串連接操作，進一步提升應用程式的執行效能。一個常見的例子是輸出 log 訊息的場合。比如說，應用程式在許多地方呼叫了 logging API 來記錄程式的執行過程與錯誤訊息，並且在不需要記錄的時候，藉由修改組態檔來關閉記錄功能。然而，程式裡面有許多地方在呼叫 logging API 的時候使用了字串插補語法來組合字串，即便把記錄功能關閉了，那些傳遞給 logging API 的字串還是會在程式執行的時候經由 `DefaultInterpolatedStringHandler` 來進行字串的組合。請看以下範例：
+
+~~~~~~~~csharp
+var date = DateTime.Now;
+logger.Enabled = true;  // 啟用記錄功能
+logger.Log($"今天是 {date.Month} 月 {date.Day} 日");
+
+logger.Enabled = false;  // 關閉記錄功能
+logger.Log($"今天是 {date.Month} 月 {date.Day} 日");
+~~~~~~~~
+
+第 3 行呼叫 Log 方法時，記錄器的功能是啟用的，這裡沒有問題。接下來，第 4 行把記錄功能關閉，故第 5 行呼叫 `Log` 方法時，儘管該方法在內部會直接返回、不輸出任何 log，但呼叫 `Log` 方法時的字串插補語法卻還是會透過 `DefaultInterpolatedStringHandler` 來完成字串的組合，而這些組合字串的操作就等於是白做工了。
+
+剛才舉的例子，如果你是那個 logging API 的設計者，便可以特別為它撰寫一個字串插補處理器來改善上述情形。以下範例仿自微軟文件：[Improved Interpolated Strings](https://docs.microsoft.com/zh-tw/dotnet/csharp/language-reference/proposals/csharp-10.0/improved-interpolated-strings#the-handler-pattern)。
+
+~~~~~~~~csharp
+using System.Runtime.CompilerServices;
+......
+[InterpolatedStringHandler]
+public ref struct MyLoggerInterpolatedStringHandler
+{
+    private DefaultInterpolatedStringHandler _handler;
+
+    public MyLoggerInterpolatedStringHandler(
+        int literalLength, int formattedCount,
+        MyLogger logger, out bool handlerIsValid)
+    {
+        if (!logger.Enabled)
+        {
+            _innerHandler = default;
+            handlerIsValid = false;
+            return;
+        }
+
+        _handler = new DefaultInterpolatedStringHandler(literalLength, formattedCount);
+        handlerIsValid = true;
+    }
+
+    public void AppendLiteral(string msg)
+    {
+        _handler.AppendLiteral(msg);
+    }
+
+    public void AppendFormatted<T>(T msg)
+    {
+        _handler.AppendFormatted(msg);
+    }
+
+    public string ToStringAndClear()
+    {
+        return _handler.ToStringAndClear();
+    }
+}
+~~~~~~~~
+
+字串插補處理器的設計要點：
+
+- 宣告型別的時候必須套用 `InterpolatedStringHandler` 特徵項（第 3 行）。
+- 宣告型別的時候加上 `ref struct`，表示這個字串插補處理器是個結構，而且必須是配置於堆疊中的結構（即不可配置於堆積；參見〈[C# 7：只能放在堆疊的結構：ref struct](https://github.com/huanlin/LearningNotes/blob/main/csharp7/_post.md#%E5%8F%AA%E8%83%BD%E6%94%BE%E5%9C%A8%E5%A0%86%E7%96%8A%E7%9A%84%E7%B5%90%E6%A7%8Bref-struct)〉）。
+- 建構式至少要有兩個 `int` 參數：`literalLength` 和 `formattedCount`（第 8～10 行）。前者代表常數字元的字數，後者則為需要插補（格式化）的數量。
+- 建構式還可以視需要加入兩個額外參數：一個是來源物件（第 10 行的 `logger` 參數），另一個是布林型別的輸出參數，代表字串處理器是否可用（（第 10 行的 `handlerIsValid` 參數）。
+- 必須提供 `AppendLiteral` 和 `AppendFormatted` 方法。在建立字串的過程中會呼叫這兩個方法。
+- 必須提供 `ToStringAndClear` 方法，以傳回最終組合完成的字串。
+
+在建構式當中，會根據來源物件 `logger` 的 `Enabled` 屬性（是否啟用記錄）來決定是否需要使用字串插補處理器：
+
+- 如果不需要記錄，則不建立字串插補處理器，並將輸出參數 `handlerIsValid` 設為 `false`。（第 12～17 行）
+- 如果需要記錄（第 19～20 行），則建立一個 `DefaultInterpolatedStringHandler` 物件，而且往後的字串組合操作都是轉交給它處理。這些操作包括：`AppendLiteral`、`AppendFormatted`、和 `ToStringAndClear` 方法。
+
+底下是記錄器類別的程式碼：
+
+~~~~~~~~csharp
+public class MyLogger
+{
+    public bool Enabled { get; set; }
+
+    public string Log(
+        [InterpolatedStringHandlerArgument("")]
+        ref MyLoggerInterpolatedStringHandler handler)
+    {
+        if (Enabled)
+        {
+            return handler.ToStringAndClear();
+        }
+
+        return String.Empty;
+    }
+}
+~~~~~~~~
+
+你可以看到，`Log` 方法的傳入參數型別並非單純的 `string`，而是自訂的字串處理器 `MyLoggerInterpolatedStringHandler`。請注意這個
 
 ## `CallerArgumentExpression` 特徵項
 

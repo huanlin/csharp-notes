@@ -517,9 +517,9 @@ logger.Enabled = false;  // 關閉記錄功能
 logger.Log($"今天是 {date.Month} 月 {date.Day} 日");
 ~~~~~~~~
 
-第 3 行呼叫 Log 方法時，記錄器的功能是啟用的，這裡沒有問題。接下來，第 4 行把記錄功能關閉，故第 5 行呼叫 `Log` 方法時，儘管該方法在內部會直接返回、不輸出任何 log，但呼叫 `Log` 方法時的字串插補語法卻還是會透過 `DefaultInterpolatedStringHandler` 來完成字串的組合，而這些組合字串的操作就等於是白做工了。
+第 3 行呼叫 Log 方法時，記錄器的功能是啟用的，這裡沒有問題。接下來，第 5 行把記錄功能關閉，故第 6 行呼叫 `Log` 方法時，儘管該方法在內部會直接返回、不輸出任何 log，但呼叫 `Log` 方法時的字串插補語法卻還是會透過 `DefaultInterpolatedStringHandler` 來完成字串的組合，而這些組合字串的操作就等於是白做工了。
 
-剛才舉的例子，如果你是那個 logging API 的設計者，便可以特別為它撰寫一個字串插補處理器來改善上述情形。以下範例仿自微軟文件：[Improved Interpolated Strings](https://docs.microsoft.com/zh-tw/dotnet/csharp/language-reference/proposals/csharp-10.0/improved-interpolated-strings#the-handler-pattern)。
+剛才舉的例子，如果你是那個 logging API 的設計者，便可以特別為它撰寫一個字串插補處理器來避免無謂的效能損耗。以下範例仿自微軟文件：[Improved Interpolated Strings](https://docs.microsoft.com/zh-tw/dotnet/csharp/language-reference/proposals/csharp-10.0/improved-interpolated-strings#the-handler-pattern)。
 
 ~~~~~~~~csharp
 using System.Runtime.CompilerServices;
@@ -561,7 +561,7 @@ public ref struct MyLoggerInterpolatedStringHandler
 }
 ~~~~~~~~
 
-字串插補處理器的設計要點：
+字串插補處理器的設計要點如下：
 
 - 宣告型別的時候必須套用 `InterpolatedStringHandler` 特徵項（第 3 行）。
 - 宣告型別的時候加上 `ref struct`，表示這個字串插補處理器是個結構，而且必須是配置於堆疊中的結構（即不可配置於堆積；參見〈[C# 7：只能放在堆疊的結構：ref struct](https://github.com/huanlin/LearningNotes/blob/main/csharp7/_post.md#%E5%8F%AA%E8%83%BD%E6%94%BE%E5%9C%A8%E5%A0%86%E7%96%8A%E7%9A%84%E7%B5%90%E6%A7%8Bref-struct)〉）。
@@ -570,10 +570,10 @@ public ref struct MyLoggerInterpolatedStringHandler
 - 必須提供 `AppendLiteral` 和 `AppendFormatted` 方法。在建立字串的過程中會呼叫這兩個方法。
 - 必須提供 `ToStringAndClear` 方法，以傳回最終組合完成的字串。
 
-在建構式當中，會根據來源物件 `logger` 的 `Enabled` 屬性（是否啟用記錄）來決定是否需要使用字串插補處理器：
+相較於 `DefaultInterpolatedStringHandler`，這裡示範的字串插補處理器只有一個比較特別的地方，即建構式會根據來源物件 `logger` 的 `Enabled` 屬性（是否啟用記錄）來決定是否需要進行字串插補：
 
 - 如果不需要記錄，則不建立字串插補處理器，並將輸出參數 `handlerIsValid` 設為 `false`。（第 12～17 行）
-- 如果需要記錄（第 19～20 行），則建立一個 `DefaultInterpolatedStringHandler` 物件，而且往後的字串組合操作都是轉交給它處理。這些操作包括：`AppendLiteral`、`AppendFormatted`、和 `ToStringAndClear` 方法。
+- 如果需要記錄（第 19～20 行），則建立一個 `DefaultInterpolatedStringHandler` 物件，而且往後的字串組合操作都是轉交給它處理；這些操作包括：`AppendLiteral`、`AppendFormatted`、和 `ToStringAndClear` 方法。
 
 底下是記錄器類別的程式碼：
 

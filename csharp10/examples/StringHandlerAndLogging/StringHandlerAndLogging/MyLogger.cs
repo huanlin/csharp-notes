@@ -19,14 +19,19 @@ public class MyLogger
     }
 
 
-    public string Log([InterpolatedStringHandlerArgument("")] ref MyLoggerInterpolatedStringHandler handler)
+    public void Log([InterpolatedStringHandlerArgument("")] ref MyLoggerInterpolatedStringHandler handler)
     {
         if (Enabled)
         {
-            return handler.ToStringAndClear();
+            string msg = handler.ToStringAndClear();
+            handler.AppendLiteral("aa");
+            // 將訊息寫入 log（略）
         }
-
-        return String.Empty;
     }
 
+
+    public static void LogDebug(this MyLogger logger, [InterpolatedStringHandlerArgument("logger")] ref MyLoggerInterpolatedStringHandler handler)
+    {
+
+    }
 }

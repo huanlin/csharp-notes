@@ -12,7 +12,7 @@ public class LogTest
     public void Run()
     {
         var date = DateTime.Now;
-        var s = logger.Log($"今天是 {date.Year} 年 {date.Month} {date.Day} 日");
+        logger.Log($"今天是 {date.Year} 年 {date.Month} {date.Day} 日");
     }
 }
 

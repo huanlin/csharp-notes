@@ -619,7 +619,7 @@ var aLogger = new MyLogger();
 aLogger.Log($"Hello, {name}");
 ~~~~~~~~
 
-編譯器看到傳入 `Log` 方法的參數是字串插補的語法，就會知道要先建立一個 `MyLoggerInterpolatedStringHandler` 型別的字串插補處理器，並由該物件來負責組合字串。建立該物件時，便會將當時的 `aLogger` 物件傳入至 `MyLoggerInterpolatedStringHandler` 建構式的第三個參數。這便是稍早說的，套用 `[InterpolatedStringHandlerArgument("")]` 特徵項時傳入空字串的作用。那麼，什麼情況會需要傳入某個引數的名稱呢？其中一個常見的場合是擴充方法，例如：
+編譯器看到傳入 `Log` 方法的參數是字串插補語法，就會知道要先建立一個 `MyLoggerInterpolatedStringHandler` 型別的字串插補處理器，並由該物件來負責組合字串。建立該物件時，便會將當時的 `aLogger` 物件傳入至 `MyLoggerInterpolatedStringHandler` 建構式的第三個參數。這便是稍早說的，套用 `[InterpolatedStringHandlerArgument("")]` 特徵項時傳入空字串的作用。那麼，什麼情況會需要傳入某個引數的名稱呢？其中一個常見的場合是擴充方法，例如：
 
 ~~~~~~~~csharp
 public static class MyLoggerExtension
@@ -634,7 +634,7 @@ public static class MyLoggerExtension
 }
 ~~~~~~~~
 
-第 5 行的意思是：請把這次呼叫的參數列中名為 `logger` 的物件傳入至 `MyLoggerInterpolatedStringHandler` 建構式的第三個參數。為什麼是第三個參數？就如稍早提過的，前面兩個參數是固定且不可少的：`literalLength` 和 `formattedCount`。
+第 5 行的意思是：請把這次呼叫的參數列中名為 `logger` 的物件傳入至 `MyLoggerInterpolatedStringHandler` 建構式的第三個參數。
 
 > 原始碼：[CustomInterpolatedStringHandler.sln](https://github.com/huanlin/LearningNotes/tree/main/csharp10/examples/CustomInterpolatedStringHandler) 裡面的 CustomInterpolStringHandler.csproj 專案。
 

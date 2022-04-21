@@ -6,7 +6,7 @@ namespace CustomInterpolatedStringHandler;
 [MemoryDiagnoser]
 public class LogTest
 {
-    MyLogger logger = new MyLogger() { Enabled = true };
+    MyLogger logger = new MyLogger() { Enabled = false };
 
     [Benchmark]
     public void Run()

@@ -517,7 +517,7 @@ logger.Enabled = false;  // 關閉記錄功能
 logger.Log($"今天是 {date.Month} 月 {date.Day} 日");
 ~~~~~~~~
 
-第 3 行呼叫 Log 方法時，記錄器的功能是啟用的，這裡沒有問題。接下來，第 5 行把記錄功能關閉，故第 6 行呼叫 `Log` 方法時，儘管該方法在內部會直接返回、不輸出任何 log，但呼叫 `Log` 方法時的字串插補語法卻還是會透過 `DefaultInterpolatedStringHandler` 來完成字串的組合，而這些組合字串的操作等於是白做工了。
+第 3 行呼叫 Log 方法時，記錄器的功能是啟用的，這裡沒有問題。接下來，第 5 行把記錄功能關閉，故第 6 行呼叫 `Log` 方法時，儘管該方法在內部會直接返回、不輸出任何 log，但呼叫 `Log` 方法時的字串插補語法卻還是會透過 `DefaultInterpolatedStringHandler` 來完成字串的組合，而這些組合字串的操作便等於白做工了。
 
 剛才舉的例子，如果你是那個 logging API 的設計者，便可以特別為它撰寫一個字串插補處理器，來避免無謂的效能損耗。以下範例仿自微軟文件：[Improved Interpolated Strings](https://docs.microsoft.com/zh-tw/dotnet/csharp/language-reference/proposals/csharp-10.0/improved-interpolated-strings#the-handler-pattern)。
 
@@ -575,7 +575,7 @@ public ref struct MyLoggerInterpolatedStringHandler
 - 如果不需要記錄，則不建立字串插補處理器，並將輸出參數 `handlerIsValid` 設為 `false`。（第 12～17 行）
 - 如果需要記錄（第 19～20 行），則建立一個 `DefaultInterpolatedStringHandler` 物件，而且往後的字串組合操作都是轉交給它處理；這些操作包括：`AppendLiteral`、`AppendFormatted`、和 `ToStringAndClear` 方法。
 
-接著來看記錄器類別的程式碼：
+接著來看記錄器（logger）類別：
 
 ~~~~~~~~csharp
 public class MyLogger
@@ -597,7 +597,7 @@ public class MyLogger
 
 你可以看到，`Log` 方法的 `handler` 參數的型別並非單純的 `string`，而是我們設計的的字串處理器 `MyLoggerInterpolatedStringHandler`。
 
-此外，`handler` 參數前面套用的特徵項 `[InterpolatedStringHandlerArgument("")]`，是用來指定欲傳遞給 `MyLoggerInterpolatedStringHandler` 建構式的引數。由於此範例並沒有需要把當前引數列當中的某個引數傳遞給字串插補處理器的建構式，故傳入空字串，表示要傳入當前呼叫此方法的物件（亦即 `this`）。如果你覺得剛剛的解釋不好理解，不妨對照一下我們的字串插補處理器的建構式：
+此外，`handler` 參數前面套用的特徵項 `[InterpolatedStringHandlerArgument("")]`，是用來指定欲傳遞給 `MyLoggerInterpolatedStringHandler` 建構式的引數。由於此範例並沒有需要把當前引數列當中的某個引數傳遞給字串插補處理器的建構式，故傳入空字串，表示要傳入當前呼叫此方法的物件（亦即 `this`）。如果你覺得剛才的解釋不好理解，不妨對照一下我們的字串插補處理器的建構函式：
 
 ~~~~~~~~csharp
 [InterpolatedStringHandler]
@@ -618,7 +618,7 @@ var aLogger = new MyLogger();
 aLogger.Log($"Hello, {name}");
 ~~~~~~~~
 
-編譯器看到傳入 `Log` 方法的參數是字串插補的語法，就會知道要先建立一個 `MyLoggerInterpolatedStringHandler` 型別的字串插補處理器，並由該物件來負責組合字串。建立該物件時，便會將當時的 `aLogger` 物件傳入至 `MyLoggerInterpolatedStringHandler` 的第三個參數。這便是稍早說的，套用 `[InterpolatedStringHandlerArgument("")]` 特徵項時傳入空字串的作用。那麼，什麼情況會需要傳入某個引數的名稱呢？其中一個常見的場合是擴充方法，例如：
+編譯器看到傳入 `Log` 方法的參數是字串插補的語法，就會知道要先建立一個 `MyLoggerInterpolatedStringHandler` 型別的字串插補處理器，並由該物件來負責組合字串。建立該物件時，便會將當時的 `aLogger` 物件傳入至 `MyLoggerInterpolatedStringHandler` 建構式的第三個參數。這便是稍早說的，套用 `[InterpolatedStringHandlerArgument("")]` 特徵項時傳入空字串的作用。那麼，什麼情況會需要傳入某個引數的名稱呢？其中一個常見的場合是擴充方法，例如：
 
 ~~~~~~~~csharp
 public static class MyLoggerExtension
@@ -633,9 +633,11 @@ public static class MyLoggerExtension
 }
 ~~~~~~~~
 
-第 5 行的意思是：請把這次呼叫的參數列中名為 `logger` 的物件傳入至 `MyLoggerInterpolatedStringHandler` 建構式的第三個參數。
+第 5 行的意思是：請把這次呼叫的參數列中名為 `logger` 的物件傳入至 `MyLoggerInterpolatedStringHandler` 建構式的第三個參數。為什麼是第三個參數？就如稍早提過的，前面兩個參數是固定且不可少的：`literalLength` 和 `formattedCount`。
 
-OK，我們的字串插補處理器已經寫好了，現在回頭看本節開頭的程式碼：
+> 原始碼：[CustomInterpolatedStringHandler.sln](https://github.com/huanlin/LearningNotes/tree/main/csharp10/examples/CustomInterpolatedStringHandler) 裡面的 CustomInterpolStringHandler.csproj 專案。
+
+OK，我們的字串插補處理器已經寫好了，回頭看本節開頭的程式碼：
 
 ~~~~~~~~csharp
 var date = DateTime.Now;
@@ -646,12 +648,16 @@ logger.Enabled = false;  // 關閉記錄功能
 logger.Log($"今天是 {date.Month} 月 {date.Day} 日");
 ~~~~~~~~
 
-我們便可以達成以下目的：
+現在，我們已達成以下目的：
 
 - 第 2～3 行：在記錄功能開啟的情況下，呼叫 `Log` 方法並傳入需要插補的字串時，會建立 `MyLoggerInterpolatedStringHandler` 物件，並由它來負責完成字串組合的工作。
 - 第 5～6 行：在記錄功能關閉的情況下，呼叫 `Log` 方法並傳入需要插補的字串時，不會建立 `MyLoggerInterpolatedStringHandler` 物件，所以也不會產生任何字串組合所需的效能損耗——更快、更省記憶體。
 
-至於上述兩種情形的效能損耗差異，我另外寫了一個小程式來觀察，並且錄製成影片。請點此連結觀看：TODO
+至於上述兩種情形的效能損耗差異，我另外寫了一個小程式來觀察，並且錄製成影片。效能測試程式的原始碼以及影片的連結如下：
+
+> Youtube 影片：[Performance Test with Custom String Interpolation Handler](https://youtu.be/cvnoj2b_61E)
+
+> 效能測試程式的原始碼：[CustomInterpolatedStringHandler.sln](https://github.com/huanlin/LearningNotes/tree/main/csharp10/examples/CustomInterpolatedStringHandler) 裡面的 InterpolStringHandlerBenchmark.csproj 專案。
 
 ## `CallerArgumentExpression` 特徵項
 

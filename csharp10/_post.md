@@ -502,11 +502,11 @@ public string Today()
 
 程式碼變多了，執行速度卻更快，消耗的記憶體也更少。就如前面影片所展示的測試結果，整體效能比 C# 9 的字串插補提升了一倍左右。在頻繁使用字串插補的場合（例如迴圈），效能差距會更明顯。這樣的寫法有點 `StringBuilder` 的味道，對吧？只是這次完全由編譯器自動生成，不用我們自己手工一行一行去刻，而且實際負責組合字串的是 .NET 6 新加入的結構：`DefaultInterpolatedStringHandler`，也就是預設的字串插補處理器。
 
-## 字串插補處理器
+### 字串插補處理器
 
-上一節末尾提到了 C# 10 的字串插補語法，其背後負責組合字串的是一個叫做 `DefaultInterpolatedStringHandler` 的結構。每當編譯器碰到字串插補語法時，便會使用這個預設的字串插補處理器來建構字串。這便是 C# 10 的字串插補效能大幅提升的主要原因。
+上一節末尾提到了 C# 10 的字串插補語法背後負責組合字串的是一個叫做 `DefaultInterpolatedStringHandler` 的結構。每當編譯器碰到字串插補語法時，便會使用這個預設的字串插補處理器來建構字串。這便是 C# 10 的字串插補效能優於 C# 9 的主要原因。
 
-在某些特殊場合，我們甚至可以自行設計特定用途的字串插補處理器，以減少一些不必要的字串連接操作，進一步提升應用程式的執行效能。一個常見的例子是輸出 log 訊息的場合。比如說，應用程式在許多地方呼叫了 logging API 來記錄程式的執行過程與錯誤訊息，並且在不需要記錄的時候，藉由修改組態檔來關閉記錄功能。然而，程式裡面有許多地方在呼叫 logging API 的時候使用了字串插補語法來組合字串，即便把記錄功能關閉了，那些傳遞給 logging API 的字串還是會在程式執行的時候經由 `DefaultInterpolatedStringHandler` 來進行字串的組合。請看以下範例：
+在某些特殊場合，我們甚至可以自行設計特定用途的字串插補處理器，以減少一些非必要的字串連接操作，進一步提升應用程式的執行效能。一個常見的例子是輸出 log 訊息的場合。比如說，應用程式在許多地方呼叫了 logging API 來記錄程式的執行過程與錯誤訊息，並且在不需要記錄的時候，藉由修改組態檔來關閉記錄功能。然而，程式裡面有許多地方在呼叫 logging API 的時候使用了字串插補語法來組合字串，即便把記錄功能關閉了，那些傳遞給 logging API 的字串還是會在程式執行的時候經由 `DefaultInterpolatedStringHandler` 來進行字串的組合。請看以下範例：
 
 ~~~~~~~~csharp
 var date = DateTime.Now;
@@ -517,9 +517,9 @@ logger.Enabled = false;  // 關閉記錄功能
 logger.Log($"今天是 {date.Month} 月 {date.Day} 日");
 ~~~~~~~~
 
-第 3 行呼叫 Log 方法時，記錄器的功能是啟用的，這裡沒有問題。接下來，第 5 行把記錄功能關閉，故第 6 行呼叫 `Log` 方法時，儘管該方法在內部會直接返回、不輸出任何 log，但呼叫 `Log` 方法時的字串插補語法卻還是會透過 `DefaultInterpolatedStringHandler` 來完成字串的組合，而這些組合字串的操作就等於是白做工了。
+第 3 行呼叫 Log 方法時，記錄器的功能是啟用的，這裡沒有問題。接下來，第 5 行把記錄功能關閉，故第 6 行呼叫 `Log` 方法時，儘管該方法在內部會直接返回、不輸出任何 log，但呼叫 `Log` 方法時的字串插補語法卻還是會透過 `DefaultInterpolatedStringHandler` 來完成字串的組合，而這些組合字串的操作等於是白做工了。
 
-剛才舉的例子，如果你是那個 logging API 的設計者，便可以特別為它撰寫一個字串插補處理器來避免無謂的效能損耗。以下範例仿自微軟文件：[Improved Interpolated Strings](https://docs.microsoft.com/zh-tw/dotnet/csharp/language-reference/proposals/csharp-10.0/improved-interpolated-strings#the-handler-pattern)。
+剛才舉的例子，如果你是那個 logging API 的設計者，便可以特別為它撰寫一個字串插補處理器，來避免無謂的效能損耗。以下範例仿自微軟文件：[Improved Interpolated Strings](https://docs.microsoft.com/zh-tw/dotnet/csharp/language-reference/proposals/csharp-10.0/improved-interpolated-strings#the-handler-pattern)。
 
 ~~~~~~~~csharp
 using System.Runtime.CompilerServices;
@@ -635,7 +635,7 @@ public static class MyLoggerExtension
 
 第 5 行的意思是：請把這次呼叫的參數列中名為 `logger` 的物件傳入至 `MyLoggerInterpolatedStringHandler` 建構式的第三個參數。
 
-OK，我們自己的字串插補處理器已經寫好了，現在回頭看本節開頭的程式碼：
+OK，我們的字串插補處理器已經寫好了，現在回頭看本節開頭的程式碼：
 
 ~~~~~~~~csharp
 var date = DateTime.Now;

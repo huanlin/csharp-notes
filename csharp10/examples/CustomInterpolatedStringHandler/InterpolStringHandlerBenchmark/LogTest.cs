@@ -1,7 +1,7 @@
 ﻿using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Running;
 
-namespace StringHandlerAndLogging;
+namespace CustomInterpolatedStringHandler;
 
 [MemoryDiagnoser]
 public class LogTest
@@ -12,7 +12,7 @@ public class LogTest
     public void Run()
     {
         var date = DateTime.Now;
-        logger.Log($"今天是 {date.Year} 年 {date.Month} {date.Day} 日");
+        logger.Log($"今天是 {date.Month} 月 {date.Day} 日");
     }
 }
 

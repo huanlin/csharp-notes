@@ -26,9 +26,9 @@ public class MyLogger
     }
 }
 
+// 擴充方法
 public static class MyLoggerExtension
 {
-    // 如果寫成靜態方法
     public static void LogDebug(
         this MyLogger logger, 
         [InterpolatedStringHandlerArgument("logger")] ref MyLoggerInterpolatedStringHandler handler)

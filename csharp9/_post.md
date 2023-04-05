@@ -744,7 +744,7 @@ static int GetLength(string s) => s.Length;
 
 注意第 2 行設定函式指標的時候，必須使用 `&` 運算子來表示某函式的位址。
 
-> 備註：在 Visual Studio 中，必須把專案的建置選項「Unsafe code」打勾，上述飯粒才能通過編譯。
+> 備註：在 Visual Studio 中，必須把專案的建置選項「Unsafe code」打勾，上述範例才能通過編譯。
 
 另外，C# 9 還增加了兩種原生大小的（native-sized）整數型別：`nint` 和 `nuint`。所謂「原生大小的整數」指的是整數大小依作業系統的位元數而定：在 64 位元的作業系統上，原生大小的整數是 64 個位元（即 8 bytes）；在 32 位元的作業系統上則是 32 位元（4 bytes）。
 

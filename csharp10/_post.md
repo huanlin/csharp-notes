@@ -296,7 +296,7 @@ void M3(Expression x) { }
 
 ~~~~~~~~csharp
 var fn1 = [Description("是在哈囉")] () => "Hello";
-var fn2 = ([Description("參數") string s) => "Hello " + s;
+var fn2 = ([Description("參數")] string s) => "Hello " + s;
 var fn3 = [Description("是在哈囉")] 
           [return: Description("回傳字串")]
           ([Description("參數")] string s) => "Hello " + s;
